@@ -13,13 +13,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import utility.parameters.UtilityParameters;
+
 public class MainMenuRightPanel extends JPanel{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final Color FRAME_COLOR = new Color(102,93,153);
-	private final Color PANELS_COLOR = new Color(120,100,255);
 	private final int BUTTON_WIDTH = 170;
 	private final int BUTTON_HEIGHT = 145;
 	private final int PAN_WIDTH = 715;
@@ -48,13 +48,13 @@ public class MainMenuRightPanel extends JPanel{
 		//set up this panel
 		this.setPreferredSize(new Dimension(PAN_WIDTH, PAN_HEIGHT));
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, PAN_HORIZONTAL_GAP, PAN_VERTICAL_GAP));
-		this.setBackground(FRAME_COLOR);
+		this.setBackground(UtilityParameters.FRAME_COLOR);
 		
 		//create and set up pan_1
 		pan_1 = new JPanel();
 		pan_1.setPreferredSize(new Dimension(PAN_1_WIDTH, PAN_1_HEIGHT));
 		pan_1.setBorder(BorderFactory.createLineBorder(Color.WHITE,1));
-		pan_1.setBackground(PANELS_COLOR);
+		pan_1.setBackground(UtilityParameters.PANELS_COLOR);
 		
 		//create and set up label
 		userNameLbl = new JLabel("User: Denis L.", JLabel.CENTER);
@@ -121,15 +121,15 @@ public class MainMenuRightPanel extends JPanel{
 		gridPan_9 = new JPanel();
 		
 		//set background color for the panels
-		gridPan_1.setBackground(PANELS_COLOR);
-		gridPan_2.setBackground(PANELS_COLOR);
-		gridPan_3.setBackground(PANELS_COLOR);
-		gridPan_4.setBackground(PANELS_COLOR);
-		gridPan_5.setBackground(PANELS_COLOR);
-		gridPan_6.setBackground(PANELS_COLOR);
-		gridPan_7.setBackground(PANELS_COLOR);
-		gridPan_8.setBackground(PANELS_COLOR);
-		gridPan_9.setBackground(PANELS_COLOR);
+		gridPan_1.setBackground(UtilityParameters.PANELS_COLOR);
+		gridPan_2.setBackground(UtilityParameters.PANELS_COLOR);
+		gridPan_3.setBackground(UtilityParameters.PANELS_COLOR);
+		gridPan_4.setBackground(UtilityParameters.PANELS_COLOR);
+		gridPan_5.setBackground(UtilityParameters.PANELS_COLOR);
+		gridPan_6.setBackground(UtilityParameters.PANELS_COLOR);
+		gridPan_7.setBackground(UtilityParameters.PANELS_COLOR);
+		gridPan_8.setBackground(UtilityParameters.PANELS_COLOR);
+		gridPan_9.setBackground(UtilityParameters.PANELS_COLOR);
 		
 		//set layout for the panels
 		gridPan_1.setLayout(new FlowLayout(FlowLayout.CENTER,GRID_PAN_HORIZONTAL_GAP, GRID_PAN_VERTICAL_GAP));
