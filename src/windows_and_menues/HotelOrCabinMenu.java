@@ -43,8 +43,8 @@ public class HotelOrCabinMenu extends JDialog{
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 32));
 		getContentPane().setBackground(UtilityParameters.POP_UP_MENU_PANEL_COLOR);
 		
-		ImageIcon cabinImg = new ImageIcon(getClass().getResource("cabin_icon.png"));
-		ImageIcon hotelImg = new ImageIcon(getClass().getResource("hotel_icon.jpg"));
+		ImageIcon cabinImg = new ImageIcon(getClass().getResource("/images/cabin_icon.png"));
+		ImageIcon hotelImg = new ImageIcon(getClass().getResource("/images/hotel_icon.jpg"));
 		
 		leftButtonPan = new JPanel();
 		leftButtonPan.setPreferredSize(new Dimension(PAN_WIDTH, PAN_HEIGHT));

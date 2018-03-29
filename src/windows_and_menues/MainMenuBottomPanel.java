@@ -37,9 +37,9 @@ public class MainMenuBottomPanel extends JPanel{
 		this.setBorder(BorderFactory.createLineBorder(Color.WHITE,1));
 		this.setBackground(UtilityParameters.PANELS_COLOR);
 		
-		exitBtn = new MainMenuBottomPanelButton("flag_icon.png");
-		reportsBtn = new MainMenuBottomPanelButton("graph_icon.png");
-		setUpBtn = new MainMenuBottomPanelButton("gear_icon.png");
+		exitBtn = new MainMenuBottomPanelButton("/images/flag_icon.png");
+		reportsBtn = new MainMenuBottomPanelButton("/images/graph_icon.png");
+		setUpBtn = new MainMenuBottomPanelButton("/images/gear_icon.png");
 		
 		exitBtn.addActionListener(new BtnListener());
 		reportsBtn.addActionListener(new BtnListener());
@@ -60,8 +60,8 @@ public class MainMenuBottomPanel extends JPanel{
 			this.setBorder(BorderFactory.createLineBorder(Color.WHITE,1));
 			this.setBackground(UtilityParameters.PANELS_COLOR);
 			
-			exitBtn = new MainMenuBottomPanelButton("flag_icon.png");
-			reportsBtn = new MainMenuBottomPanelButton("graph_icon.png");
+			exitBtn = new MainMenuBottomPanelButton("/images/flag_icon.png");
+			reportsBtn = new MainMenuBottomPanelButton("/images/graph_icon.png");
 			dimmedSetUpBtn = new MainMenuBottomPanelButton(imagePath);
 			
 			exitBtn.addActionListener(new BtnListener());

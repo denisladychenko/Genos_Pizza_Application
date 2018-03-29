@@ -78,13 +78,13 @@ public class MainMenuRightPanel extends JPanel{
 		this.add(pan_2);
 		
 		//images for the buttons
-		Icon voidTicketButtonImg = new ImageIcon(getClass().getResource("void_ticket_icon.png"));
-		Icon allTicketsButtonImg = new ImageIcon(getClass().getResource("all_ticket_icon.png"));
-		Icon newTicketButtonImg = new ImageIcon(getClass().getResource("new_ticket_icon.png"));
-		Icon logOffButtonImg = new ImageIcon(getClass().getResource("monitor_icon.png"));
-		Icon recallTicketButtonImg = new ImageIcon(getClass().getResource("recall_icon.png"));
-		Icon clockOutButtonImg = new ImageIcon(getClass().getResource("alarm_icon.png"));
-		Icon cashOutButtonImg = new ImageIcon(getClass().getResource("cash_icon.png"));
+		Icon voidTicketButtonImg = new ImageIcon(getClass().getResource("/images/void_ticket_icon.png"));
+		Icon allTicketsButtonImg = new ImageIcon(getClass().getResource("/images/all_ticket_icon.png"));
+		Icon newTicketButtonImg = new ImageIcon(getClass().getResource("/images/new_ticket_icon.png"));
+		Icon logOffButtonImg = new ImageIcon(getClass().getResource("/images/monitor_icon.png"));
+		Icon recallTicketButtonImg = new ImageIcon(getClass().getResource("/images/recall_icon.png"));
+		Icon clockOutButtonImg = new ImageIcon(getClass().getResource("/images/alarm_icon.png"));
+		Icon cashOutButtonImg = new ImageIcon(getClass().getResource("/images/cash_icon.png"));
 		
 		//create and set up buttons to add to the panel
 		voidTicketBtn = new JButton(voidTicketButtonImg);

@@ -1,6 +1,8 @@
 package windows_and_menues;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
@@ -18,10 +20,13 @@ public class DialMenu extends JDialog{
 	private JTextPane label;
 	private JTextField txtField;
 	private JButton backSpcBtn;
-	private JButton num_1Btn, num_2Btn, num_3Btn, num_4Btn, num_5Btn, num_6Btn, num_7Btn, num_8Btn, num_9Btn, num_0Btn, dotBtn, cancelBtn;
+	private JButton cancelBtn;
 	private JButton enterBtn;
 	
-	
+	/**
+	 *Constructor for the class
+	 *@param lblText this is the text to appear on the label 
+	 */
 	public DialMenu(String lblText){
 		Font font = new Font("Calibri", Font.BOLD, 21);
 		Font txtFieldFont = new Font("Areal", Font.BOLD, 60);
@@ -57,6 +62,32 @@ public class DialMenu extends JDialog{
 		txtField.setPreferredSize(new Dimension(360, 90));
 		txtField.setFont(txtFieldFont);
 		txtField.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		//sets limit for the number of symbols entered
+		//prevent user from entering non-digit symbols into the field
+		txtField.addKeyListener(new KeyAdapter() {
+		    public void keyTyped(KeyEvent evt) {
+		    	//this sets the limit for number of symbols user can type into the text field
+		        if(txtField.getText().length() >= 10 && !(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE ||
+		        		evt.getKeyChar() == KeyEvent.VK_DELETE)) {
+		            getToolkit().beep();
+		            evt.consume();
+		         }
+		        //Prevents the user from entering more than one decimal point symbol
+		        if(txtField.getText().indexOf(".") != -1 && (int)evt.getKeyChar() == 46){
+		        	getToolkit().beep();
+		        	evt.consume();
+		        }
+		        //this only allows digits and decimal point symbol to be entered
+		        //48 is the ASCI code for '0' and 57 is the ASCI code for '9'
+		        if(((int)evt.getKeyChar() < 48 || (int)evt.getKeyChar() > 57) && 
+		        		(!(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE || evt.getKeyChar() == KeyEvent.VK_DELETE ||
+		        		(int)evt.getKeyChar() == 46))) {
+		        	getToolkit().beep();
+		        	evt.consume();
+		        }
+		        
+		     }
+		});
 		
 		
 		backSpcBtn = new JButton("<");
@@ -98,7 +129,7 @@ public class DialMenu extends JDialog{
 		pan_3.setPreferredSize(new Dimension(370, 140));
 		pan_3.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		
-		ImageIcon enterBtnImg = new ImageIcon(getClass().getResource("enter_btn.png"));
+		ImageIcon enterBtnImg = new ImageIcon(getClass().getResource("/images/enter_btn.png"));
 		enterBtn = new JButton(enterBtnImg);
 		pan_3.add(enterBtn);
 		
@@ -118,7 +149,8 @@ public class DialMenu extends JDialog{
 	private class numButton extends JButton{
 		
 		/**
-		 * 
+		 * This class creates button
+		 * @param btnText text to appear on the button
 		 */
 		private static final long serialVersionUID = 1L;
 

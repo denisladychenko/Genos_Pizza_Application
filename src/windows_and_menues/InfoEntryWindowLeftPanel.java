@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -16,7 +18,7 @@ import javax.swing.JTextField;
 
 import utility.parameters.UtilityParameters;
 
-public class HotelInfoEntryWindowLeftPanel extends JPanel{
+public class InfoEntryWindowLeftPanel extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -30,12 +32,13 @@ public class HotelInfoEntryWindowLeftPanel extends JPanel{
 	private JButton mapBtn;
 	private JLabel newCustLbl;
 
-	public HotelInfoEntryWindowLeftPanel(){
+	public InfoEntryWindowLeftPanel(String lbl_1, String lbl_2, String lbl_3, String lbl_4){
 		
 		Font labelFont = new Font("Areal", 0, 20);
 		
 		this.setPreferredSize(new Dimension(635, 800));
 		this.setLayout(new FlowLayout());
+		this.setBounds(5, 5, 635, 800);
 		this.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		this.setBackground(UtilityParameters.FRAME_COLOR);
 		
@@ -45,25 +48,24 @@ public class HotelInfoEntryWindowLeftPanel extends JPanel{
 		pan_1.setBackground(UtilityParameters.FRAME_COLOR);
 		pan_1.setBorder(BorderFactory.createSoftBevelBorder(1));
 		
-		hotelPhoneLbl = new JLabel("Hotel Phone #: ", JLabel.LEFT);
+		hotelPhoneLbl = new JLabel(lbl_1, JLabel.LEFT);
 		hotelPhoneLbl.setPreferredSize(new Dimension(180, 70));
-		//hotelPhoneLbl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		hotelPhoneLbl.setFont(labelFont);
 		hotelPhoneLbl.setForeground(Color.YELLOW);
 		
-		hotelNameLbl = new JLabel("Hotel Name: ", JLabel.LEFT);
+		hotelNameLbl = new JLabel(lbl_2, JLabel.LEFT);
 		hotelNameLbl.setPreferredSize(new Dimension(180, 70));
 		//hotelNameLbl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		hotelNameLbl.setFont(labelFont);
 		hotelNameLbl.setForeground(Color.YELLOW);
 		
-		hotelAddressLbl = new JLabel("Hotel Address: ", JLabel.LEFT);
+		hotelAddressLbl = new JLabel(lbl_3, JLabel.LEFT);
 		hotelAddressLbl.setPreferredSize(new Dimension(180, 70));
 		//roomNumLbl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		hotelAddressLbl.setFont(labelFont);
 		hotelAddressLbl.setForeground(Color.YELLOW);
 		
-		roomNumLbl = new JLabel("Room #: ", JLabel.LEFT);
+		roomNumLbl = new JLabel(lbl_4, JLabel.LEFT);
 		roomNumLbl.setPreferredSize(new Dimension(180, 70));
 		//roomNumLbl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		roomNumLbl.setFont(labelFont);
@@ -82,28 +84,70 @@ public class HotelInfoEntryWindowLeftPanel extends JPanel{
 		
 		hotelPhoneTxtField = new JTextField();
 		hotelPhoneTxtField.setPreferredSize(new Dimension(420, 60));
-		//hotelPhoneTxtField.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		//hotelPhoneTxtField.setBorder(BorderFactory.createSoftBevelBorder(1));
-		//hotelPhoneTxtField.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+		hotelPhoneTxtField.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		hotelPhoneTxtField.setBorder(BorderFactory.createLoweredBevelBorder());
+		//register key listener event for the text field
+		hotelPhoneTxtField.addKeyListener(new KeyAdapter() {
+						    public void keyTyped(KeyEvent evt) {
+						    	//this sets the limit for number of symbols user can type into the text field
+						        if(hotelPhoneTxtField.getText().length() >= 10 && !(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE ||
+						        		evt.getKeyChar() == KeyEvent.VK_DELETE)) {
+						            getToolkit().beep();
+						            evt.consume();
+						         }
+						        //this only allows digits to be entered
+						        //48 is the ASCI code for '0' and 57 is the ASCI code for '9'
+						        if(((int)evt.getKeyChar() < 48 || (int)evt.getKeyChar() > 57) && 
+						        		(!(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE || evt.getKeyChar() == KeyEvent.VK_DELETE))) {
+						        	getToolkit().beep();
+						        	evt.consume();
+						        }
+						     }
+						});
+		
 		
 		hotelAddressTxtField = new JTextField();
 		hotelAddressTxtField.setPreferredSize(new Dimension(420, 60));
+		hotelAddressTxtField.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		hotelAddressTxtField.setBorder(BorderFactory.createLoweredBevelBorder());
 		
 		hotelNameTxtField = new JTextField();
 		hotelNameTxtField.setPreferredSize(new Dimension(420, 60));
+		hotelNameTxtField.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		hotelNameTxtField.setBorder(BorderFactory.createLoweredBevelBorder());
 		
 		roomNumTxtField = new JTextField();
 		roomNumTxtField.setPreferredSize(new Dimension(420, 60));
+		roomNumTxtField.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		roomNumTxtField.setBorder(BorderFactory.createLoweredBevelBorder());
+		
 		custNameTxtField = new JTextField();
 		custNameTxtField.setPreferredSize(new Dimension(420, 60));
+		custNameTxtField.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		custNameTxtField.setBorder(BorderFactory.createLoweredBevelBorder());
+		
 		cellphoneTxtField = new JTextField();
 		cellphoneTxtField.setPreferredSize(new Dimension(420, 60));
+		cellphoneTxtField.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		cellphoneTxtField.setBorder(BorderFactory.createLoweredBevelBorder());
+		//register key listener event for the text field
+		cellphoneTxtField.addKeyListener(new KeyAdapter() {
+				    public void keyTyped(KeyEvent evt) {
+				    	//this sets the limit for number of symbols user can type into the text field
+				        if(cellphoneTxtField.getText().length() >= 10 && !(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE ||
+				        		evt.getKeyChar() == KeyEvent.VK_DELETE)) {
+				            getToolkit().beep();
+				            evt.consume();
+				         }
+				        //this only allows digits to be entered
+				        //48 is the ASCI code for '0' and 57 is the ASCI code for '9'
+				        if(((int)evt.getKeyChar() < 48 || (int)evt.getKeyChar() > 57) && 
+				        		(!(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE || evt.getKeyChar() == KeyEvent.VK_DELETE))) {
+				        	getToolkit().beep();
+				        	evt.consume();
+				        }
+				     }
+				});
 		
 		
 		pan_2 = new JPanel();
@@ -117,7 +161,7 @@ public class HotelInfoEntryWindowLeftPanel extends JPanel{
 		newCustomerPan.setLayout(new GridLayout(1, 1));
 		newCustomerPan.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 		
-		ImageIcon labelImg = new ImageIcon(getClass().getResource("new_customer_icon.png"));
+		ImageIcon labelImg = new ImageIcon(getClass().getResource("/images/new_customer_icon.png"));
 		newCustLbl = new JLabel(labelImg);
 		newCustLbl.setPreferredSize(new Dimension(235, 100));
 		newCustomerPan.add(newCustLbl);
@@ -194,7 +238,7 @@ public class HotelInfoEntryWindowLeftPanel extends JPanel{
 		pan_3.setBackground(UtilityParameters.FRAME_COLOR);
 		//pan_3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
-		ImageIcon mapIcon = new ImageIcon(getClass().getResource("map_icon.png"));
+		ImageIcon mapIcon = new ImageIcon(getClass().getResource("/images/map_icon.png"));
 		
 		mapBtn = new JButton(mapIcon);
 		mapBtn.setPreferredSize(new Dimension(90, 90));
