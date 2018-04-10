@@ -52,7 +52,11 @@ public class InfoEntryWindow extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
-
+	/**
+	 *This static function returns the collection of JPanels (the ones on the right) added
+	 *to InfoEntryWindow form.
+	 *@return panelList Collection of panels
+	 */
 	public static ArrayList<JPanel> getPanelList() {
 		return panelList;
 	}

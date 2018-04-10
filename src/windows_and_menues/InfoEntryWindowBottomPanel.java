@@ -61,7 +61,9 @@ public class InfoEntryWindowBottomPanel extends JPanel{
 		this.add(prevOrdersBtn);
 		this.add(nextBtn);
 	}
-	
+	/**
+	 *This is the click listener for prevOrders button 
+	 */
 	private class PrevOrdersButtonClickListener implements ActionListener {
 
 		@Override
@@ -74,6 +76,9 @@ public class InfoEntryWindowBottomPanel extends JPanel{
 		}
 		
 	}
+	/**
+	 *This is the click listener for MoreInfo button 
+	 */
 	private class MoreInfoButtonClickListener implements ActionListener {
 
 		@Override
@@ -86,6 +91,9 @@ public class InfoEntryWindowBottomPanel extends JPanel{
 		}
 		
 	}
+	/**
+	 *This is the click listener for CustStatus button 
+	 */
 	private class CustStatusButtonClickListener implements ActionListener {
 
 		@Override

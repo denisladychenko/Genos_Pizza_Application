@@ -31,6 +31,7 @@ public class InfoEntryWindowLeftPanel extends JPanel{
 	private JTextField hotelPhoneTxtField, hotelNameTxtField;
 	private JButton mapBtn;
 	private JLabel newCustLbl;
+	private JLabel[] custLabelsArr = new JLabel[2];         //collection of customer status labels
 
 	public InfoEntryWindowLeftPanel(String lbl_1, String lbl_2, String lbl_3, String lbl_4){
 		
@@ -158,12 +159,26 @@ public class InfoEntryWindowLeftPanel extends JPanel{
 		
 		newCustomerPan = new JPanel();
 		newCustomerPan.setPreferredSize(new Dimension(235, 100));
-		newCustomerPan.setLayout(new GridLayout(1, 1));
+		newCustomerPan.setLayout(null);
 		newCustomerPan.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 		
 		ImageIcon labelImg = new ImageIcon(getClass().getResource("/images/new_customer_icon.png"));
 		newCustLbl = new JLabel(labelImg);
-		newCustLbl.setPreferredSize(new Dimension(235, 100));
+		newCustLbl.setBounds(0, 0, 235, 100);
+		newCustLbl.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+		newCustLbl.setVisible(false);
+		
+		ImageIcon custInfoLabelImg = new ImageIcon(getClass().getResource("/images/cust_info_icon.png"));
+		JLabel custInfoLbl = new JLabel(custInfoLabelImg);
+		custInfoLbl.setBounds(0, 0, 235, 100);
+		custInfoLbl.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+		//custInfoLbl.setVisible(false);
+		
+		//add labels to the collection
+		custLabelsArr[1] = custInfoLbl;
+		custLabelsArr[0] = newCustLbl;
+		//add labels to the panel
+		newCustomerPan.add(custInfoLbl);
 		newCustomerPan.add(newCustLbl);
 		
 		
@@ -207,6 +222,8 @@ public class InfoEntryWindowLeftPanel extends JPanel{
 		custNamePan.setLayout(new FlowLayout());
 		custNamePan.setBackground(UtilityParameters.FRAME_COLOR);
 		//custNamePan.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		
+		
 		
 		custNamePan.add(custNameLbl);
 		custNamePan.add(custNameTxtField);

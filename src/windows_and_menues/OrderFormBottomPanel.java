@@ -3,7 +3,10 @@ package windows_and_menues;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import utility.parameters.UtilityParameters;
 
@@ -117,6 +120,17 @@ public class OrderFormBottomPanel extends JPanel{
 		public void actionPerformed(ActionEvent arg0) {
 			page2Btn.setVisible(false);
 			page1Btn.setVisible(true);
+			int size = OrderForm.getListOfPanels().size();       //size of the listOfPanels
+			
+			//open page 2 based on what panel is visible at the moment
+			//if pizza selection panel page 1 is open then open pizza selection panel page 2
+			if(OrderForm.getListOfPanels().get(1).isVisible()) {
+				//close all the right panels except for pizza selection panel page 2
+				for(int i = 0; i < size; i++) {
+					OrderForm.getListOfPanels().get(i).setVisible(false);
+				}
+				OrderForm.getListOfPanels().get(2).setVisible(true);
+			}
 		}
 		
 	}	
@@ -126,6 +140,17 @@ public class OrderFormBottomPanel extends JPanel{
 		public void actionPerformed(ActionEvent arg0) {
 			page1Btn.setVisible(false);
 			page2Btn.setVisible(true);
+			int size = OrderForm.getListOfPanels().size();       //size of the listOfPanels
+			
+			//open page 1 based on what panel is visible at the moment
+			//if pizza selection panel page 2 is open then open pizza selection panel page 1
+			if(OrderForm.getListOfPanels().get(2).isVisible()) {
+				//close all the right panels except for pizza selection panel page 1
+				for(int i = 0; i < size; i++) {
+					OrderForm.getListOfPanels().get(i).setVisible(false);
+				}
+				OrderForm.getListOfPanels().get(1).setVisible(true);
+			}
 		}
 		
 	}	
