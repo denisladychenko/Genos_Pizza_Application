@@ -1,10 +1,10 @@
 package windows_and_menues;
 
-import java.awt.*;
-import java.security.Policy.Parameters;
+import java.awt.Dimension;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import utility.parameters.UtilityParameters;
 

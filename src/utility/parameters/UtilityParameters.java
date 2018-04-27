@@ -11,6 +11,7 @@ public class UtilityParameters {
 	public static final Color SET_UP_MENU_COLOR = new Color(99, 2, 23);                     //color of the set up menu window
 	public static final int WINDOW_WIDTH = 1100;                                            //main window width
 	public static final int WINDOW_HEIGHT = 1000;                                           //main window height
+	public static final int SET_UP_WINDOW_WIDTH = 1120;                                            //main window width
 	public static final Font DATA_ENTRY_FONT = new Font("Areal", Font.BOLD, 24);            //font for the data entry fields
 	public static final Font DATA_ENTRY_LABEL_FONT = new Font("Areal", Font.BOLD, 36);      //font for the data entry labels
 	public static final Font ORDER_FONT = new Font("Courier", Font.PLAIN, 18);              //font to show order info

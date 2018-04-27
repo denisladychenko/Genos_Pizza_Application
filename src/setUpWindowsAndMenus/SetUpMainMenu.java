@@ -30,13 +30,15 @@ public class SetUpMainMenu extends JFrame{
 		this.setVisible(true);
 	}
 	
-	private class SetUpMenuButtonClick implements ActionListener {
-
+	private static class SetUpMenuButtonClick implements ActionListener {
+		public static JFrame setUpMenuSubMenu;
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			new SetUpMenuSubMenu();
+			setUpMenuSubMenu = new SetUpMenuSubMenu();
 			
 		}
-		
+		public static JFrame getSetUpMenuSubMenu() {
+			return setUpMenuSubMenu;
+		}
 	}
 }

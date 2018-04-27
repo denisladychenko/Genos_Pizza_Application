@@ -5,7 +5,9 @@ package genosPizza;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import setUpWindowsAndMenus.SetUpMainMenu;
+import setUpWindowsAndMenus.AddRemoveCategoryController;
+import setUpWindowsAndMenus.AddRemoveCategoryForm;
+import setUpWindowsAndMenus.AddRemoveCategoryModel;
 import windows_and_menues.MainMenu;
 
 
@@ -21,12 +23,16 @@ public class GenosPizza {
 	            public void run() {
 	            	//new InfoEntryWindow("Hotel Info Entry Form", "Hotel phone #", "Hotel name", "Hotel address", "Room #");
 	        		//new InfoEntryWindow("Cabin Info Entry Form", "Cabin phone #", "Cabin name", "Cabin address", "Vehicle description");
-	        		//mainMenu = new MainMenu("/images/dimmed_gear_icon.png");
+	        		//mainMenu = new MainMenu("/images/gear_icon.png");
 	        		//new PhoneNumberDialMenu("Enter the phone number:");
 	        		//new DialMenu("Enter the amount to subtract");
 	        		//new HotelOrCabinMenu();
 	        		//new OrderForm();
-	            	new SetUpMainMenu();
+	            	//new SetUpMainMenu();
+	            	
+	            	AddRemoveCategoryForm categoryForm = new AddRemoveCategoryForm();
+	            	new AddRemoveCategoryController(categoryForm, 
+	            			new AddRemoveCategoryModel(categoryForm));
 	            }
 	        });
 		
