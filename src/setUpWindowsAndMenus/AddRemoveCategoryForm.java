@@ -56,7 +56,7 @@ public class AddRemoveCategoryForm extends JFrame{
 					deleteBtn;                           //button to remove category
 	private JButton saveBtn,                             //button to save category in the database
 					finishedBtn;                         //finish and exit button
-	private JPanel buttonPanel;                        //panel to hold control buttons
+	
 	
 	
 	public AddRemoveCategoryForm() {
@@ -77,7 +77,7 @@ public class AddRemoveCategoryForm extends JFrame{
 		
 		buttons = new ArrayList<JButton>();
 		loadArray(buttons);
-		
+		//add buttons to location panels
 		for(int i = 0; i < buttons.size(); i++) {
 			if(i < 25) {
 				locationPanelPage1.add(buttons.get(i));
@@ -90,7 +90,7 @@ public class AddRemoveCategoryForm extends JFrame{
 		this.add(locationPanelPage1);
 		
 		
-		//locationPanelPage1.setVisible(false);
+		//hide the second panel
 		locationPanelPage2.setVisible(false);
 		
 		nameLbl = new JLabel("Category Name");
@@ -116,6 +116,7 @@ public class AddRemoveCategoryForm extends JFrame{
 		imageFileNameTxt = new JTextField();
 		imageFileNameTxt.setBounds(10, 340, 250, 35);
 		imageFileNameTxt.setFont(new Font("Areal", Font.BOLD, 24));
+		imageFileNameTxt.setEditable(false);
 		
 	
 		ImageIcon lookUpImg = new ImageIcon(getClass().getResource("/images/mag_glass.png"));
@@ -134,10 +135,11 @@ public class AddRemoveCategoryForm extends JFrame{
 		gapTxt = new JTextField();
 		gapTxt.setBounds(10, 455, 200, 35);
 		gapTxt.setFont(new Font("Areal", Font.BOLD, 24));
+		gapTxt.setText("0");                  //set gap to 0(appropriate in most cases)
 		gapTxt.addKeyListener(new KeyAdapter() {
 		    public void keyTyped(KeyEvent evt) {
 		    	//this sets the limit for number of symbols user can type into the text field
-		        if(gapTxt.getText().length() >= 3 && !(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE ||
+		        if(gapTxt.getText().length() >= 2 && !(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE ||
 		        		evt.getKeyChar() == KeyEvent.VK_DELETE)) {
 		        	
 		        	getToolkit().beep();
@@ -296,10 +298,12 @@ public class AddRemoveCategoryForm extends JFrame{
 				
 				stmt = con.prepareStatement(statement);
 				rs = stmt.executeQuery();
-				
+				//if no record in DB exist with this particular button parameters
+				//then create an empty button
 				if(!rs.next()) {
-					but = new ItemSelectionMenuPanelButton("empty_img.png","", 20, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+					but = new ItemSelectionMenuPanelButton("empty_img.png","", 0, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
 				}
+				//if such a record exists in the DB then create the button with particular parameters
 				else {
 					but = new ItemSelectionMenuPanelButton(rs.getString("filename"),
 															rs.getString("name_on_button"),
@@ -309,7 +313,7 @@ public class AddRemoveCategoryForm extends JFrame{
 															BUTTON_WIDTH,
 															BUTTON_HEIGHT);
 				}
-				but.setActionCommand(Integer.toString(i));
+				but.setActionCommand(Integer.toString(i)); //action command holds buttons Array index
 				a.add(but);
 				x += BUTTON_WIDTH;       //155 is the width of the buttons. Put buttons side by side
 				
@@ -329,7 +333,9 @@ public class AddRemoveCategoryForm extends JFrame{
 			
 		}
 	}
-	
+	/**
+	 *Gets Connection to Menu database 
+	 */
 	public static Connection getDatabaseConnection() {
 		Connection con = null;
 		try {
@@ -345,77 +351,138 @@ public class AddRemoveCategoryForm extends JFrame{
 		}
 		return con;
 	}
-	
+	/**
+	 *Gets Category name 
+	 *@return Category name 
+	 */
 	public String getCategoryName() {
 		return catNameTxt.getText();
 	}
-	
+	/**
+	 *Gets Image file name
+	 *@return image file name 
+	 */
 	public String getFileName() {
 		return imageFileNameTxt.getText();
 	}
-	
+	/**
+	 *Gets image file name TextField 
+	 *@return imageFileNameTxt The image file name text field
+	 */
 	public JTextField getImageFileNameTextField() {
 		return imageFileNameTxt;
 	}
-	
+	/**
+	 *Gets button gap
+	 *@return the gap converted to integer
+	 */
 	public int getGap() {
 		return Integer.parseInt(gapTxt.getText());
 	}
-	
+	/**
+	 *Gets location X coordinate 
+	 *@return the X coordinate converted to integer
+	 */
 	public int getLocationXCoord() {
 		return Integer.parseInt(locationXTxt.getText());
 	}
-	
+	/**
+	 *Sets location X coordinate 
+	 *@param xc the X coordinate 
+	 */
 	public void setLocationXCoord(int xc) {
 		locationXTxt.setText(Integer.toString(xc));
 	}
-	
+	/**
+	 *Sets location Y coordinate 
+	 *@param  yc the Y coordinate 
+	 */
 	public void setLocationYCoord(int yc) {
 		locationYTxt.setText(Integer.toString(yc));
 	}
-	
+	/**
+	 *Gets location Y coordinate 
+	 *@return the Y coordinate converted to integer
+	 */
 	public int getLocationYCoord() {
 		return Integer.parseInt(locationYTxt.getText());
 	}
-	
+	/**
+	 *Gets page
+	 *@return the page converted to integer
+	 */
 	public int getPage() {
 		return Integer.parseInt(pageTxt.getText());
 	}
-	
+	/**
+	 *Sets page
+	 *@param p The page on which button is located
+	 */
 	public void setPageText(int p) {
 		pageTxt.setText(Integer.toString(p));
 	}
-	
+	/**
+	 *Gets location panel page 1
+	 *@return locationPanelPage1 The location panel page 1
+	 */
 	public JPanel getLocationPanelPage1() {
 		return locationPanelPage1;
 	}
-	
+	/**
+	 *Gets location panel page 2
+	 *@return locationPanelPage2 The location panel page 2
+	 */
 	public JPanel getLocationPanelPage2() {
 		return locationPanelPage2;
 	}
-	
-	public void setLocationPanelPage1(JPanel p) {
-		locationPanelPage1 = p;
-	}
-	
-	public void setLocationPanelPage2(JPanel p) {
-		locationPanelPage2 = p;
-	}
-	
+	/**
+	 *Gets list of location buttons
+	 *@return buttons The list of location buttons
+	 */
 	public ArrayList<JButton> getButtons(){
 		return buttons;
 	}
-	
+	/**
+	 *Gets category name field
+	 *@return catNameTxt The category name textField
+	 */
 	public JTextField getCatNameField() {
 		return catNameTxt;
 	}
-	
+	/**
+	 *Location buttons click listener
+	 *@param al The action listener for location buttons
+	 */
 	public void addLocationButtonClickListener(ActionListener al) {
 		int size = buttons.size();
 		for(int i = 0; i < size; i++) {
 			buttons.get(i).addActionListener(al);
 		}
 	}
+	/**
+	 *Resets Sample button
+	 */
+	public void resetSampleButton() {
+		getButton().setText("");
+		getButton().setButtonIcon("empty_img.png");
+		getButton().setButtonGap(0);
+	}
+	/**
+	 *Resets form
+	 */
+	public void resetForm() {
+		resetSampleButton();
+		catNameTxt.setText("");
+		imageFileNameTxt.setText("");
+		gapTxt.setText("0");
+		locationXTxt.setText("");
+		locationYTxt.setText("");
+		pageTxt.setText("");
+	}
+	/**
+	 *Validates user input
+	 *@return valid Returns valid if input is valid
+	 */
 	public boolean validateInput() {
 		boolean valid = true;
 		if(catNameTxt.getText().length() == 0){
@@ -437,21 +504,68 @@ public class AddRemoveCategoryForm extends JFrame{
 		
 		return valid;
 	}
-	
+	/**
+	 *Click listener for the Save button
+	 *@param al The action listener
+	 */
 	public void addSaveButtonClickListener(ActionListener al) {
 		saveBtn.addActionListener(al);
 	}
-	
+	/**
+	 *Change listener for the category name field
+	 *@param kl The key listener
+	 */
 	public void addCatNameTxtChangeListener(KeyListener kl) {
 		catNameTxt.addKeyListener(kl);
 	}
 	
-	
+	/**
+	 *Gets sample button
+	 *@return button The sample button converted to ItemSelectionMenuPanelButton
+	 */
 	public ItemSelectionMenuPanelButton getButton() {
 		return  (ItemSelectionMenuPanelButton) button;
 	}
-	
+	/**
+	 *Change listener for the image name field
+	 *@param dl The document listener
+	 */
 	public void addImageNameChangeListener(DocumentListener dl) {
 		imageFileNameTxt.getDocument().addDocumentListener(dl);
+	}
+	/**
+	 *Click listener for the image lookup button
+	 *@param al The action listener
+	 */
+	public void addImageLookUpBtnListener(ActionListener al) {
+		imageLookUpBtn.addActionListener( al);
+	}
+	/**
+	 *Click listener for the Page1 button
+	 *@param al The action listener
+	 */
+	public void addPage1ClickListener(ActionListener al) {
+		page1Btn.addActionListener(al);
+	}
+	/**
+	 *Click listener for the Page2 button
+	 *@param al The action listener
+	 */
+	public void addPage2ClickListener(ActionListener al) {
+		page2Btn.addActionListener(al);
+	}
+	/**
+	 *Click listener for the Delete button
+	 *@param al The action listener
+	 */
+	public void addDeleteButtonListener(ActionListener al) {
+		deleteBtn.addActionListener(al);
+	}
+	/**
+	 *Click listener for the Finished button
+	 *@param al The action listener
+	 */
+	public void addFinishedButtonListener(ActionListener al) {
+		finishedBtn.addActionListener(al);
 	}
 }

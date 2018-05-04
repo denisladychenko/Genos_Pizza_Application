@@ -7,6 +7,7 @@ import javax.swing.SwingUtilities;
 
 import setUpWindowsAndMenus.AddRemoveCategoryController;
 import setUpWindowsAndMenus.AddRemoveCategoryForm;
+import setUpWindowsAndMenus.AddRemoveCategoryImageSelectorForm;
 import setUpWindowsAndMenus.AddRemoveCategoryModel;
 import windows_and_menues.MainMenu;
 
@@ -32,7 +33,8 @@ public class GenosPizza {
 	            	
 	            	AddRemoveCategoryForm categoryForm = new AddRemoveCategoryForm();
 	            	new AddRemoveCategoryController(categoryForm, 
-	            			new AddRemoveCategoryModel(categoryForm));
+	            			new AddRemoveCategoryModel(categoryForm), new AddRemoveCategoryImageSelectorForm());
+	           
 	            }
 	        });
 		

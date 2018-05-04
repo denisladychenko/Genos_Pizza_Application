@@ -21,7 +21,9 @@ public class AddRemoveCategoryModel {
 	public AddRemoveCategoryModel(AddRemoveCategoryForm form) {
 		theView = form;
 	}
-	
+	/**
+	 *Stores all the user input into the fields 
+	 */
 	public void setUpDataValues() {               
 		catName = theView.getCategoryName();
 		imageFileName = theView.getFileName();
@@ -31,11 +33,15 @@ public class AddRemoveCategoryModel {
 		page = theView.getPage();
 }
 	
+	/**
+	 *Adds category to the DB 
+	 */
 	public void addCategory() {
 		Connection con = getDatabaseConnection();
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
+			//insert all the category info into DB
 			String SQLStatement = "INSERT INTO categories(image_id, name_on_button, xcoord, ycoord, gap, page) "
 									+ "VALUES('" + getImageCategoryId() + "'"
 									+ ", '" + catName + "'"
@@ -50,12 +56,16 @@ public class AddRemoveCategoryModel {
 		}
 		
 	}
-	
+	/**
+	 *Deletes category from the DB 
+	 */
 	public void deleteCategoryFromDatabase(int xc, int yc, int p) {
 		Connection con = getDatabaseConnection();
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
+			//delete category with these coordinates on this page 
+			//from the DB
 			String SQLStatement = "DELETE FROM categories "
 								+ "WHERE xcoord =" + xc + " "
 								+ "AND ycoord =" + yc + " "
@@ -67,7 +77,10 @@ public class AddRemoveCategoryModel {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 *Gets image ID from the DB
+	 *@return imageId The id of the image
+	 */
 	public int getImageCategoryId() {
 		Connection con = getDatabaseConnection();
 		Statement stmt = null;
@@ -87,7 +100,10 @@ public class AddRemoveCategoryModel {
 		}
 		return imageId;
 	}
-	
+	/**
+	 *Gets connection to the DB
+	 *@return con Connection object
+	 */
 	public static Connection getDatabaseConnection() {
 		Connection con = null;
 		try {

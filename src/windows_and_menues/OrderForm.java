@@ -75,7 +75,7 @@ public class OrderForm extends JFrame {
 				new ItemSelectionMenuPanelButton("pepperoni.png", 
 						"Ex.Lg. Loaded Pepperonmm", -8,      //extra large  pepperoni button
 						621, 156, 155, 155));
-		System.out.println(("Ex.Lg. Loaded Pepperonmm").length());
+		
 		//toppings panel
 		toppingsPanel = new ItemSelectionMenuPanel();
 		

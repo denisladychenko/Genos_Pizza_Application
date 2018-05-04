@@ -34,24 +34,7 @@ public class ItemSelectionMenuPanelButton extends JButton {
 		this.setBounds(xCoord, yCoord, w, h);
 	}
 	
-	/*public ItemSelectionMenuPanelButton(
-			String text,        //text on the button
-			int gap,            //gap between icon and text
-			int xCoord,         //button x coordinate
-			int yCoord,         //button y coordinate
-			int w,              //button width
-			int h) {            //button height
-
-		this.setBorder(BorderFactory.createRaisedBevelBorder());
-		this.setText("<html><center>" + text + "</center></html>");  //html helps to wrap up and center the text in the button
-		this.setVerticalTextPosition(SwingConstants.BOTTOM);
-		this.setHorizontalTextPosition(SwingConstants.CENTER);
-		this.setIconTextGap(gap);
-
-		this.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		this.setForeground(Color.BLACK);
-		this.setBounds(xCoord, yCoord, w, h);
-	}*/
+	
 	
 	public void setButtonIcon(String fp) {
 		this.setIcon(new ImageIcon(getClass().getResource("/menu_item_images/" + fp)));
