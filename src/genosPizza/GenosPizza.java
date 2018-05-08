@@ -5,10 +5,8 @@ package genosPizza;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import setUpWindowsAndMenus.AddRemoveCategoryController;
-import setUpWindowsAndMenus.AddRemoveCategoryForm;
-import setUpWindowsAndMenus.AddRemoveCategoryImageSelectorForm;
-import setUpWindowsAndMenus.AddRemoveCategoryModel;
+import setUpWindowsAndMenus.AddRemoveMenuItemController;
+import setUpWindowsAndMenus.AddRemoveMenuItemForm;
 import windows_and_menues.MainMenu;
 
 
@@ -31,10 +29,13 @@ public class GenosPizza {
 	        		//new OrderForm();
 	            	//new SetUpMainMenu();
 	            	
-	            	AddRemoveCategoryForm categoryForm = new AddRemoveCategoryForm();
-	            	new AddRemoveCategoryController(categoryForm, 
-	            			new AddRemoveCategoryModel(categoryForm), new AddRemoveCategoryImageSelectorForm());
-	           
+	            	//AddRemoveCategoryForm categoryForm = new AddRemoveCategoryForm();
+	            	/*new AddRemoveCategoryController(categoryForm, 
+	            			new AddRemoveCategoryModel(categoryForm), new AddRemoveCategoryImageSelectorForm());*/
+	            	//new EditItemForm();
+	            	//new AddRemoveMenuItemForm();
+	            	//new AddNewItemForm();
+	            	new AddRemoveMenuItemController(new AddRemoveMenuItemForm());
 	            }
 	        });
 		
