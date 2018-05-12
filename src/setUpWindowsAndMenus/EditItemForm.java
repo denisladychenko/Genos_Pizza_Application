@@ -1,5 +1,7 @@
 package setUpWindowsAndMenus;
 
+import general_classes.MenuItem;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -42,7 +44,7 @@ public class EditItemForm extends JFrame{
 	
 	private ArrayList<JButton> buttons;
 	private JLabel nameLbl;
-	private JButton button;           // sample button
+	private ItemSelectionMenuPanelButton button;           // sample button
 	private JPanel locationPanelPage1, locationPanelPage2;         //panels that hold location buttons
 	private JTextField itemNameTxt;                    //input field for category name
 	private JTextField imageFileNameTxt;              //text field for image file input
@@ -59,12 +61,12 @@ public class EditItemForm extends JFrame{
 	private JTextField priceTxt,                         //item price
 					   nameOnTicketTxt;                  //name on ticket
 	
-					   
+	private MenuItem item;				   
 	
 	
 	
 	public EditItemForm() {
-		
+	
 		button = new ItemSelectionMenuPanelButton("empty_img.png","",0, 80,10, 155, 155);
 		//button.setEnabled(false);
 		
@@ -139,7 +141,6 @@ public class EditItemForm extends JFrame{
 		gapTxt = new JTextField();
 		gapTxt.setBounds(90, 370, 170, 35);
 		gapTxt.setFont(new Font("Areal", Font.BOLD, 24));
-		gapTxt.setText("0");                  //set gap to 0(appropriate in most cases)
 		gapTxt.addKeyListener(new KeyAdapter() {
 		    public void keyTyped(KeyEvent evt) {
 		    	//this sets the limit for number of symbols user can type into the text field
@@ -293,53 +294,28 @@ public class EditItemForm extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setTitle("Edit Item Form");
 		getContentPane().setBackground(UtilityParameters.SET_UP_MENU_COLOR);
-		this.setVisible(true);
+		
 	}
 	
 	
-	
+	public void setMenuItem(MenuItem item) {
+		this.item = item;
+	}
 	
 	/** 
 	 * Loads the arrayList with buttons
 	 * @param a an arrayList of JButtons
 	 */
-	public static void loadArray(ArrayList<JButton> a) {
+	public void loadArray(ArrayList<JButton> a) {
 		int x = 0;         //button x coordinate on the panel
 		int y = 0;         //button y coordinate on the panel 
-		int page = 1;      //
-		Connection con = getDatabaseConnection();
-		PreparedStatement stmt;
-		ResultSet rs;
-		String statement;
 		JButton but = null;
 		
 		
 		for(int i = 0; i < TOTAL_NUM_BUTTONS;i++) {
-			if(i > 24) {
-				page = 2;
-			}
 			
-			try {
-				statement = "SELECT name_on_button, xcoord, ycoord, gap, im.filename FROM categories c "
-				+ "JOIN images im ON c.image_id = im.id WHERE xcoord ='"+ x +"' AND ycoord ='"+ y +"' AND page ='" + page + "'";
+				but = new ItemSelectionMenuPanelButton("empty_img.png","", 0, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
 				
-				stmt = con.prepareStatement(statement);
-				rs = stmt.executeQuery();
-				//if no record in DB exist with this particular button parameters
-				//then create an empty button
-				if(!rs.next()) {
-					but = new ItemSelectionMenuPanelButton("empty_img.png","", 0, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
-				}
-				//if such a record exists in the DB then create the button with particular parameters
-				else {
-					but = new ItemSelectionMenuPanelButton(rs.getString("filename"),
-															rs.getString("name_on_button"),
-															rs.getInt("gap"),
-															rs.getInt("xcoord"),
-															rs.getInt("ycoord"),
-															BUTTON_WIDTH,
-															BUTTON_HEIGHT);
-				}
 				but.setActionCommand(Integer.toString(i)); //action command holds buttons Array index
 				a.add(but);
 				x += BUTTON_WIDTH;       //155 is the width of the buttons. Put buttons side by side
@@ -353,13 +329,63 @@ public class EditItemForm extends JFrame{
 					else
 						x = 0;
 				}
+			
+			
+		}
+	}
+	public void updateItemButtons(ArrayList<JButton> a) {
+		int page = 1;      //
+		Connection con = getDatabaseConnection();
+		PreparedStatement stmt;
+		ResultSet rs;
+		String statement;
+		ItemSelectionMenuPanelButton but = null;
+		
+		try {
+			for(int i = 0; i < AddRemoveMenuItemForm.TOTAL_NUM_BUTTONS;i++) {
+				but = (ItemSelectionMenuPanelButton) a.get(i);
+				if(i > 24) {
+					page = 2;
+				}
+			
+			
+				statement = "SELECT name_on_button, xcoord, ycoord, gap, im.filename FROM items it "
+						+ "JOIN images im ON it.image_id = im.id "
+						+ "WHERE category_id IN('" + item.getCategoryId() + "') "
+						+ "AND xcoord ='"+ but.getX() +"' AND ycoord ='"+ but.getY() +"' AND page ='" + page + "'";
+				
+				stmt = con.prepareStatement(statement);
+				rs = stmt.executeQuery();
+				//if no record in DB exist with this particular button parameters
+				//then create an empty button
+				if(!rs.next()) {
+					but.setText("");
+					but.setButtonIcon("empty_img.png");
+					but.setButtonGap(0);
+				}
+				//if such a record exists in the DB then create the button with particular parameters
+				else {
+					but.setButtonIcon(rs.getString("filename"));
+					but.setText(rs.getString("name_on_button"));
+					but.setButtonGap(rs.getInt("gap"));
+					but.revalidate();
+				}
+		}
+				con.close();
 			} catch (SQLException e) {
 				
 				e.printStackTrace();
 			}
 			
-		}
+		
 	}
+	
+	public void updateItemButton() {
+		button.setButtonIcon(item.getImageFileName());
+		button.setText(item.getNameOnButton());
+		button.revalidate();
+	}
+	
 	/**
 	 *Gets Connection to Menu database 
 	 */
@@ -473,7 +499,7 @@ public class EditItemForm extends JFrame{
 	 *Gets category name field
 	 *@return catNameTxt The category name textField
 	 */
-	public JTextField getCatNameField() {
+	public JTextField getItemNameField() {
 		return itemNameTxt;
 	}
 	/**
@@ -542,7 +568,7 @@ public class EditItemForm extends JFrame{
 	 *Change listener for the category name field
 	 *@param kl The key listener
 	 */
-	public void addCatNameTxtChangeListener(KeyListener kl) {
+	public void addItemNameTxtChangeListener(KeyListener kl) {
 		itemNameTxt.addKeyListener(kl);
 	}
 	

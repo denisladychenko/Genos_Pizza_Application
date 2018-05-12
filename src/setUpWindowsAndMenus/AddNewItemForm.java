@@ -312,13 +312,13 @@ public class AddNewItemForm extends JFrame{
 		String statement;
 		JButton but = null;
 		
-		
-		for(int i = 0; i < TOTAL_NUM_BUTTONS;i++) {
-			if(i > 24) {
-				page = 2;
-			}
+		try {
+			for(int i = 0; i < TOTAL_NUM_BUTTONS;i++) {
+				if(i > 24) {
+					page = 2;
+				}
 			
-			try {
+			
 				statement = "SELECT name_on_button, xcoord, ycoord, gap, im.filename FROM categories c "
 				+ "JOIN images im ON c.image_id = im.id WHERE xcoord ='"+ x +"' AND ycoord ='"+ y +"' AND page ='" + page + "'";
 				
@@ -352,12 +352,14 @@ public class AddNewItemForm extends JFrame{
 					else
 						x = 0;
 				}
+		}
+				con.close();
 			} catch (SQLException e) {
 				
 				e.printStackTrace();
 			}
 			
-		}
+		
 	}
 	/**
 	 *Gets Connection to Menu database 

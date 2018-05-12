@@ -35,8 +35,8 @@ public class AddRemoveMenuItemForm extends JFrame{
 	static final int BUTTON_HEIGHT = 155;
 	
 	private ArrayList<JButton> buttons;
-	private JButton catButton;           // category button
-	private JButton itemButton;           // item button
+	private ItemSelectionMenuPanelButton catButton;           // category button
+	private ItemSelectionMenuPanelButton itemButton;           // item button
 	private JPanel locationPanelPage1, locationPanelPage2;         //panels that hold location buttons
 	private JPanel categoryPanel,                      //panel to hold category info
 				   itemPanel;                         //Panel to hold item set up
@@ -46,10 +46,10 @@ public class AddRemoveMenuItemForm extends JFrame{
 					deleteBtn;                           //button to remove category
 	private JButton finishedBtn;                         //finish and exit button
 	private JButton leftArrowBtn, rightArrowBtn;               //category navigation buttons
-	private JButton EditItemBtn,                         //button to edit the existing item
-					AddNewItemBtn,                       //button to create new item
-					AddComponentsListBtn,                //button to add components list to the item
-					AddModifiersListBtn;                 //button to add modifiers
+	private JButton editItemBtn,                         //button to edit the existing item
+					addNewItemBtn,                       //button to create new item
+					addComponentsListBtn,                //button to add components list to the item
+					addModifiersListBtn;                 //button to add modifiers
 					
 	
 	
@@ -105,18 +105,18 @@ public class AddRemoveMenuItemForm extends JFrame{
 		itemLbl.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		itemLbl.setForeground(Color.YELLOW);
 		
-		EditItemBtn = new JButton("Edit Item"); 
-		EditItemBtn.setBounds(10, 190, 280, 50);
-		EditItemBtn.setFont(UtilityParameters.DATA_ENTRY_FONT);
-		AddNewItemBtn = new JButton("Add New Item");
-		AddNewItemBtn.setBounds(10, 250, 280, 50);
-		AddNewItemBtn.setFont(UtilityParameters.DATA_ENTRY_FONT);
-		AddComponentsListBtn = new JButton("Add Components"); 
-		AddComponentsListBtn.setBounds(10, 310, 280, 50);
-		AddComponentsListBtn.setFont(UtilityParameters.DATA_ENTRY_FONT);
-		AddModifiersListBtn = new JButton("Add Modifiers");  
-		AddModifiersListBtn.setBounds(10, 370, 280, 50);
-		AddModifiersListBtn.setFont(UtilityParameters.DATA_ENTRY_FONT);
+		editItemBtn = new JButton("Edit Item"); 
+		editItemBtn.setBounds(10, 190, 280, 50);
+		editItemBtn.setFont(UtilityParameters.DATA_ENTRY_FONT);
+		addNewItemBtn = new JButton("Add New Item");
+		addNewItemBtn.setBounds(10, 250, 280, 50);
+		addNewItemBtn.setFont(UtilityParameters.DATA_ENTRY_FONT);
+		addComponentsListBtn = new JButton("Add Components"); 
+		addComponentsListBtn.setBounds(10, 310, 280, 50);
+		addComponentsListBtn.setFont(UtilityParameters.DATA_ENTRY_FONT);
+		addModifiersListBtn = new JButton("Add Modifiers");  
+		addModifiersListBtn.setBounds(10, 370, 280, 50);
+		addModifiersListBtn.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		
 		
 		itemPanel = new JPanel();
@@ -126,10 +126,10 @@ public class AddRemoveMenuItemForm extends JFrame{
 		itemPanel.setBackground(UtilityParameters.SET_UP_MENU_COLOR);
 		itemPanel.add(itemButton);
 		itemPanel.add(itemLbl);
-		itemPanel.add(EditItemBtn);
-		itemPanel.add(AddNewItemBtn);
-		itemPanel.add(AddComponentsListBtn);
-		itemPanel.add(AddModifiersListBtn);
+		itemPanel.add(editItemBtn);
+		itemPanel.add(addNewItemBtn);
+		itemPanel.add(addComponentsListBtn);
+		itemPanel.add(addModifiersListBtn);
 		
 		
 		
@@ -153,7 +153,7 @@ public class AddRemoveMenuItemForm extends JFrame{
 		
 		
 		//hide the second panel
-		locationPanelPage1.setVisible(false);
+		locationPanelPage2.setVisible(false);
 		
 		
 		
@@ -207,12 +207,15 @@ public class AddRemoveMenuItemForm extends JFrame{
 		this.setVisible(true);
 	}
 	
-	
-	
-	
-	
-	
-	
+	public ItemSelectionMenuPanelButton getItemButton() {
+		return itemButton;
+	}
+
+	public void setItemButton(ItemSelectionMenuPanelButton itemButton) {
+		this.itemButton = itemButton;
+	}
+
+
 	/**
 	 *Gets Connection to Menu database 
 	 */
@@ -302,8 +305,18 @@ public class AddRemoveMenuItemForm extends JFrame{
 	public ItemSelectionMenuPanelButton getButton() {
 		return  (ItemSelectionMenuPanelButton) catButton;
 	}
-	
-	
+	public void addEditItemButtonListener(ActionListener al) {
+		editItemBtn.addActionListener(al);
+	}
+	public void addNewItemButtonListener(ActionListener al) {
+		addNewItemBtn.addActionListener(al);
+	}
+	public void addModifiersListener(ActionListener al) {
+		addModifiersListBtn.addActionListener(al);
+	}
+	public void addComponentsListener(ActionListener al) {
+		addComponentsListBtn.addActionListener(al);
+	}
 	/**
 	 *Click listener for the Page1 button
 	 *@param al The action listener

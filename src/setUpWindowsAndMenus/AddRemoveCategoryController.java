@@ -80,11 +80,12 @@ public class AddRemoveCategoryController {
 	  *Event Listener for Delete button
 	  */
 	class DeleteButtonClick implements ActionListener{
-
-		private static final int NUM_BUTTONS_PER_PAGE = 25;
+	
+	
+		
 		@Override
 		public void actionPerformed(ActionEvent evt) {
-			
+			if(JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this category?") == 0) {
 			int page = view.getPage();
 			int xCoord = view.getLocationXCoord();
 			int yCoord = view.getLocationYCoord();
@@ -93,7 +94,7 @@ public class AddRemoveCategoryController {
 			model.deleteCategoryFromDatabase(xCoord, yCoord, page);
 			clearButton();  //repaints the button
 		}
-		
+		}	
 	}
 	/**
 	 *Event Listener for Save button
@@ -168,7 +169,7 @@ public class AddRemoveCategoryController {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			imageForm.setVisible(true); //display imgae lookup form
+			imageForm.setVisible(true); //display image lookup form
 		}
 		
 	}
@@ -370,7 +371,7 @@ public class AddRemoveCategoryController {
 				if(rs.next()) {
 					return true;
 				}
-				
+				con.close();
 			} catch (SQLException e) {
 				
 				e.printStackTrace();
