@@ -26,7 +26,7 @@ public class MenuItem {
 	}
 	
 	public MenuItem(int categoryId, int imageId, String nameOnButton, String imageFileName,
-			String nameOnTicket, double price, int gap, int xCoord, int yCoord) {
+			String nameOnTicket, double price, int gap, int xCoord, int yCoord, int page) {
 		super();
 		this.imageFileName = imageFileName;
 		this.categoryId = categoryId;
@@ -37,6 +37,7 @@ public class MenuItem {
 		this.gap = gap;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
+		this.page = page;
 	}
 
 	public int getCategoryId() {

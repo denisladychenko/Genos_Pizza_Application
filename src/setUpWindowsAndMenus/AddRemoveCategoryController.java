@@ -11,13 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import setUpWindowsAndMenus.AddRemoveCategoryImageSelectorForm.ImageInfo;
 import windows_and_menues.ItemSelectionMenuPanelButton;
 
 public class AddRemoveCategoryController {
@@ -116,9 +114,7 @@ public class AddRemoveCategoryController {
 					JOptionPane.showMessageDialog(null, "There is a different button already exist on this spot."
 							+ "Remove existing button first, then add another one");
 				}
-				
-				
-				
+		
 			}
 			
 		}
@@ -242,10 +238,8 @@ public class AddRemoveCategoryController {
 				        //include them in the text 
 		        	view.getButton().setButtonText(view.getCatNameField().getText() + evt.getKeyChar());
 		       		}
-		        }
-		        
-		        
-		        view.getButton().resetText();       //reset text on the button
+		        }	        
+		 
 		        view.getButton().revalidate();
 	
 			}
@@ -283,7 +277,7 @@ public class AddRemoveCategoryController {
 	 *Resets the button on the location panel when button is added
 	 */
 	public void buttonReset() {
-		ArrayList<JButton> buttons = view.getButtons();
+		ArrayList<ItemSelectionMenuPanelButton> buttons = view.getButtons();
 		int size = buttons.size();
 		//if on first page search the first half of the buttons array
 		if(view.getPage() == 1) {
@@ -318,7 +312,7 @@ public class AddRemoveCategoryController {
 	 *Clears the button on the location panel when button is deleted
 	 */
 	public void clearButton() {
-		ArrayList<JButton> buttons = view.getButtons();
+		ArrayList<ItemSelectionMenuPanelButton> buttons = view.getButtons();
 		int size = buttons.size();
 		if(view.getPage() == 1) {
 			for(int i = 0; i < (size / 2); i++) {

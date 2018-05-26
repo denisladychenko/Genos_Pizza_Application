@@ -42,7 +42,7 @@ public class ItemSelectionMenuPanelButton extends JButton {
 	
 	public void setButtonText(String text) {
 		this.text = text;
-		
+		resetText();
 	}
 	public void setButtonGap(int gap) {
 		this.setIconTextGap(gap);
@@ -53,4 +53,5 @@ public class ItemSelectionMenuPanelButton extends JButton {
 	public void resetText() {
 		setText(leftHTML + this.text + rightHTML);
 	}
+	
 }

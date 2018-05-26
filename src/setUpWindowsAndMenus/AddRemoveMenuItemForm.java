@@ -34,7 +34,7 @@ public class AddRemoveMenuItemForm extends JFrame{
 	static final int BUTTON_WIDTH = 155;
 	static final int BUTTON_HEIGHT = 155;
 	
-	private ArrayList<JButton> buttons;
+	private ArrayList<ItemSelectionMenuPanelButton> buttons;
 	private ItemSelectionMenuPanelButton catButton;           // category button
 	private ItemSelectionMenuPanelButton itemButton;           // item button
 	private JPanel locationPanelPage1, locationPanelPage2;         //panels that hold location buttons
@@ -145,7 +145,7 @@ public class AddRemoveMenuItemForm extends JFrame{
 		
 		
 		
-		buttons = new ArrayList<JButton>();
+		buttons = new ArrayList<ItemSelectionMenuPanelButton>();
 		
 		
 		this.add(locationPanelPage2);
@@ -261,7 +261,7 @@ public class AddRemoveMenuItemForm extends JFrame{
 	 *Gets list of location buttons
 	 *@return buttons The list of location buttons
 	 */
-	public ArrayList<JButton> getButtons(){
+	public ArrayList<ItemSelectionMenuPanelButton> getButtons(){
 		return buttons;
 	}
 	/**

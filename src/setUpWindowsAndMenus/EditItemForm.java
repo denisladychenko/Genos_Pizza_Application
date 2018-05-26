@@ -42,21 +42,20 @@ public class EditItemForm extends JFrame{
 	private static final int BUTTON_WIDTH = 155;
 	private static final int BUTTON_HEIGHT = 155;
 	
-	private ArrayList<JButton> buttons;
+	private ArrayList<ItemSelectionMenuPanelButton> buttons;
 	private JLabel nameLbl;
 	private ItemSelectionMenuPanelButton button;           // sample button
 	private JPanel locationPanelPage1, locationPanelPage2;         //panels that hold location buttons
-	private JTextField itemNameTxt;                    //input field for category name
+	private JTextField itemNameTxt;                    //input field for item name
 	private JTextField imageFileNameTxt;              //text field for image file input
 	private JTextField gapTxt;                        //text field for gap input
-	private JTextField locationXTxt;                   //text field for category location x coordinate
-	private JTextField locationYTxt;                   //text field for category location y coordinate
+	private JTextField locationXTxt;                   //text field for item location x coordinate
+	private JTextField locationYTxt;                   //text field for item location y coordinate
 	private JTextField pageTxt;                       //text field for a page number
 	private JButton imageLookUpBtn;                   //button for image look up
 	private JButton page1Btn,                            //button to go to page 1
-					page2Btn,                            //button to go to page 2
-					deleteBtn;                           //button to remove category
-	private JButton saveBtn,                             //button to save category in the database
+					page2Btn;                            //button to go to page 2                      
+	private JButton saveBtn,                             //button to save item in the database
 					finishedBtn;                         //finish and exit button
 	private JTextField priceTxt,                         //item price
 					   nameOnTicketTxt;                  //name on ticket
@@ -81,7 +80,7 @@ public class EditItemForm extends JFrame{
 		
 		
 		
-		buttons = new ArrayList<JButton>();
+		buttons = new ArrayList<ItemSelectionMenuPanelButton>();
 		loadArray(buttons);
 		//add buttons to location panels
 		for(int i = 0; i < buttons.size(); i++) {
@@ -211,6 +210,32 @@ public class EditItemForm extends JFrame{
 		priceTxt = new JTextField();
 		priceTxt.setBounds(90, 660, 170, 35);
 		priceTxt.setFont(new Font("Areal", Font.BOLD, 24));
+		//sets limit for the number of symbols entered
+				//prevent user from entering non-digit symbols into the field
+		priceTxt.addKeyListener(new KeyAdapter() {
+				    public void keyTyped(KeyEvent evt) {
+				    	//this sets the limit for number of symbols user can type into the text field
+				        if(priceTxt.getText().length() >= 5 && !(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE ||
+				        		evt.getKeyChar() == KeyEvent.VK_DELETE)) {
+				            getToolkit().beep();
+				            evt.consume();
+				         }
+				        //Prevents the user from entering more than one decimal point symbol
+				        if(priceTxt.getText().indexOf(".") != -1 && (int)evt.getKeyChar() == 46){
+				        	getToolkit().beep();
+				        	evt.consume();
+				        }
+				        //this only allows digits and decimal point symbol to be entered
+				        //48 is the ASCI code for '0' and 57 is the ASCI code for '9'
+				        if(((int)evt.getKeyChar() < 48 || (int)evt.getKeyChar() > 57) && 
+				        		(!(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE || evt.getKeyChar() == KeyEvent.VK_DELETE ||
+				        		(int)evt.getKeyChar() == 46))) {
+				        	getToolkit().beep();
+				        	evt.consume();
+				        }
+				        
+				     }
+				});
 		
 		
 		JLabel nameOnTicketLbl = new JLabel("Name on Ticket");
@@ -221,6 +246,19 @@ public class EditItemForm extends JFrame{
 		nameOnTicketTxt = new JTextField();
 		nameOnTicketTxt.setBounds(10, 740, 280, 35);
 		nameOnTicketTxt.setFont(new Font("Areal", Font.BOLD, 24));
+		nameOnTicketTxt.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent evt) {
+		    	//this sets the limit for number of symbols user can type into the text field
+		       if(nameOnTicketTxt.getText().length() >= 18 && !(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE ||
+		        		evt.getKeyChar() == KeyEvent.VK_DELETE)) {
+		        	
+		    	   nameOnTicketTxt.getToolkit().beep();
+		            evt.consume();
+		        }
+	
+			}
+		
+		});
 		
 		
 		//panel to hold control buttons
@@ -249,9 +287,7 @@ public class EditItemForm extends JFrame{
 		page2Btn.setBounds(439, 23, 207, 120);
 		page2Btn.setFont(new Font("Segoe UI", Font.BOLD, 32));
 		
-		deleteBtn = new JButton("Delete");
-		deleteBtn.setBounds(651, 23, 207, 120);
-		deleteBtn.setFont(new Font("Segoe UI", Font.BOLD, 32));
+		
 		
 		finishedBtn = new JButton("Finished");
 		finishedBtn.setBounds(863, 23, 207, 120);
@@ -260,7 +296,6 @@ public class EditItemForm extends JFrame{
 		buttonPanel.add(saveBtn);
 		buttonPanel.add(page1Btn);
 		buttonPanel.add(page2Btn);
-		buttonPanel.add(deleteBtn);
 		buttonPanel.add(finishedBtn);
 		
 		this.add(button);
@@ -306,10 +341,10 @@ public class EditItemForm extends JFrame{
 	 * Loads the arrayList with buttons
 	 * @param a an arrayList of JButtons
 	 */
-	public void loadArray(ArrayList<JButton> a) {
+	public void loadArray(ArrayList<ItemSelectionMenuPanelButton> a) {
 		int x = 0;         //button x coordinate on the panel
 		int y = 0;         //button y coordinate on the panel 
-		JButton but = null;
+		ItemSelectionMenuPanelButton but = null;
 		
 		
 		for(int i = 0; i < TOTAL_NUM_BUTTONS;i++) {
@@ -333,7 +368,7 @@ public class EditItemForm extends JFrame{
 			
 		}
 	}
-	public void updateItemButtons(ArrayList<JButton> a) {
+	public void updateItemButtons(ArrayList<ItemSelectionMenuPanelButton> a) {
 		int page = 1;      //
 		Connection con = getDatabaseConnection();
 		PreparedStatement stmt;
@@ -343,15 +378,14 @@ public class EditItemForm extends JFrame{
 		
 		try {
 			for(int i = 0; i < AddRemoveMenuItemForm.TOTAL_NUM_BUTTONS;i++) {
-				but = (ItemSelectionMenuPanelButton) a.get(i);
+				but = a.get(i);
 				if(i > 24) {
 					page = 2;
 				}
 			
-			
 				statement = "SELECT name_on_button, xcoord, ycoord, gap, im.filename FROM items it "
 						+ "JOIN images im ON it.image_id = im.id "
-						+ "WHERE category_id IN('" + item.getCategoryId() + "') "
+						+ "WHERE category_id IN('"+ item.getCategoryId() +"') "
 						+ "AND xcoord ='"+ but.getX() +"' AND ycoord ='"+ but.getY() +"' AND page ='" + page + "'";
 				
 				stmt = con.prepareStatement(statement);
@@ -359,14 +393,14 @@ public class EditItemForm extends JFrame{
 				//if no record in DB exist with this particular button parameters
 				//then create an empty button
 				if(!rs.next()) {
-					but.setText("");
+					but.setButtonText("");
 					but.setButtonIcon("empty_img.png");
 					but.setButtonGap(0);
 				}
 				//if such a record exists in the DB then create the button with particular parameters
 				else {
 					but.setButtonIcon(rs.getString("filename"));
-					but.setText(rs.getString("name_on_button"));
+					but.setButtonText(rs.getString("name_on_button"));
 					but.setButtonGap(rs.getInt("gap"));
 					but.revalidate();
 				}
@@ -382,7 +416,7 @@ public class EditItemForm extends JFrame{
 	
 	public void updateItemButton() {
 		button.setButtonIcon(item.getImageFileName());
-		button.setText(item.getNameOnButton());
+		button.setButtonText(item.getNameOnButton());
 		button.revalidate();
 	}
 	
@@ -405,10 +439,10 @@ public class EditItemForm extends JFrame{
 		return con;
 	}
 	/**
-	 *Gets Category name 
-	 *@return Category name 
+	 *Gets Item name 
+	 *@return Item name 
 	 */
-	public String getCategoryName() {
+	public String getItemName() {
 		return itemNameTxt.getText();
 	}
 	/**
@@ -424,6 +458,9 @@ public class EditItemForm extends JFrame{
 	 */
 	public JTextField getImageFileNameTextField() {
 		return imageFileNameTxt;
+	}
+	public void setGap(String g) {
+		gapTxt.setText(g);
 	}
 	/**
 	 *Gets button gap
@@ -488,11 +525,27 @@ public class EditItemForm extends JFrame{
 	public JPanel getLocationPanelPage2() {
 		return locationPanelPage2;
 	}
+	
+	public void setPriceText(double price) {
+		priceTxt.setText(Double.toString(price));
+	}
+	public String getPriceText() {
+		return priceTxt.getText();
+	}
+	
+	public void setNameOnTicket(String name) {
+		nameOnTicketTxt.setText(name);
+	}
+	
+	public String getNameOnTicket() {
+		return nameOnTicketTxt.getText();
+	}
+	
 	/**
 	 *Gets list of location buttons
 	 *@return buttons The list of location buttons
 	 */
-	public ArrayList<JButton> getButtons(){
+	public ArrayList<ItemSelectionMenuPanelButton> getButtons(){
 		return buttons;
 	}
 	/**
@@ -554,6 +607,14 @@ public class EditItemForm extends JFrame{
 			JOptionPane.showMessageDialog(null, "Choose location for the category please!");
 			valid = false;
 		}
+		else if(priceTxt.getText().length() == 0 ) {
+			JOptionPane.showMessageDialog(null, "Enter item's price!");
+			valid = false;
+		}
+		else if(nameOnTicketTxt.getText().length() == 0 ) {
+			JOptionPane.showMessageDialog(null, "Name on ticket input is needed!");
+			valid = false;
+		}
 		
 		return valid;
 	}
@@ -577,7 +638,7 @@ public class EditItemForm extends JFrame{
 	 *@return button The sample button converted to ItemSelectionMenuPanelButton
 	 */
 	public ItemSelectionMenuPanelButton getButton() {
-		return  (ItemSelectionMenuPanelButton) button;
+		return  button;
 	}
 	/**
 	 *Change listener for the image name field
@@ -606,13 +667,6 @@ public class EditItemForm extends JFrame{
 	 */
 	public void addPage2ClickListener(ActionListener al) {
 		page2Btn.addActionListener(al);
-	}
-	/**
-	 *Click listener for the Delete button
-	 *@param al The action listener
-	 */
-	public void addDeleteButtonListener(ActionListener al) {
-		deleteBtn.addActionListener(al);
 	}
 	/**
 	 *Click listener for the Finished button

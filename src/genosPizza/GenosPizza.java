@@ -5,10 +5,7 @@ package genosPizza;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import setUpWindowsAndMenus.AddRemoveMenuItemController;
-import setUpWindowsAndMenus.AddRemoveMenuItemForm;
-import setUpWindowsAndMenus.EditItemForm;
-import setUpWindowsAndMenus.EditItemImageSelectorForm;
+import setUpWindowsAndMenus.CreateModifiersListForm;
 import windows_and_menues.MainMenu;
 
 
@@ -37,7 +34,12 @@ public class GenosPizza {
 	            	//new EditItemForm();
 	            	//new AddRemoveMenuItemForm();
 	            	//new AddNewItemForm();
-	            	new AddRemoveMenuItemController(new AddRemoveMenuItemForm(), new EditItemForm(), new EditItemImageSelectorForm());
+	            	/*AddRemoveMenuItemForm addRemoveMenuItemForm = new AddRemoveMenuItemForm();
+	            	new AddRemoveMenuItemController(addRemoveMenuItemForm, new EditItemForm(),
+	            	new ItemImageSelectorForm(), new AddNewItemController(new AddNewItemForm(),addRemoveMenuItemForm));*/
+	            	//new AddModifiersListToItemForm();
+	            	//new CreateModifierForm();
+	            	new CreateModifiersListForm();
 	            }
 	        });
 		

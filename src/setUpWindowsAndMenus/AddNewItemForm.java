@@ -39,26 +39,25 @@ public class AddNewItemForm extends JFrame{
 	private static final int BUTTON_WIDTH = 155;
 	private static final int BUTTON_HEIGHT = 155;
 	
-	private ArrayList<JButton> buttons;
+	private ArrayList<ItemSelectionMenuPanelButton> buttons;
 	private JLabel nameLbl;
 	private JButton button;           // sample button
 	private JPanel locationPanelPage1, locationPanelPage2;         //panels that hold location buttons
-	private JTextField itemNameTxt;                    //input field for category name
+	private JTextField itemNameTxt;                    //input field for item name
 	private JTextField imageFileNameTxt;              //text field for image file input
 	private JTextField gapTxt;                        //text field for gap input
-	private JTextField locationXTxt;                   //text field for category location x coordinate
-	private JTextField locationYTxt;                   //text field for category location y coordinate
+	private JTextField locationXTxt;                   //text field for item location x coordinate
+	private JTextField locationYTxt;                   //text field for item location y coordinate
 	private JTextField pageTxt;                       //text field for a page number
 	private JButton imageLookUpBtn;                   //button for image look up
 	private JButton page1Btn,                            //button to go to page 1
-					page2Btn,                            //button to go to page 2
-					deleteBtn;                           //button to remove category
-	private JButton saveBtn,                             //button to save category in the database
+					page2Btn;                            //button to go to page 2
+	private JButton saveBtn,                             //button to save item in the database
 					finishedBtn;                         //finish and exit button
 	private JTextField priceTxt,                         //item price
 					   nameOnTicketTxt;                  //name on ticket
 	
-					   
+	private String categoryName;                              //category at which to create new Item				   
 	
 	
 	
@@ -78,7 +77,7 @@ public class AddNewItemForm extends JFrame{
 		
 		
 		
-		buttons = new ArrayList<JButton>();
+		buttons = new ArrayList<ItemSelectionMenuPanelButton>();
 		loadArray(buttons);
 		//add buttons to location panels
 		for(int i = 0; i < buttons.size(); i++) {
@@ -133,7 +132,7 @@ public class AddNewItemForm extends JFrame{
 		gapLbl.setForeground(Color.YELLOW);
 		
 		JLabel messageLbl = new JLabel("(gap between image and text)");
-		messageLbl.setBounds(90, 4055, 280, 15);
+		messageLbl.setBounds(90, 405, 280, 15);
 		messageLbl.setForeground(Color.YELLOW);
 		gapTxt = new JTextField();
 		gapTxt.setBounds(90, 370, 170, 35);
@@ -209,7 +208,30 @@ public class AddNewItemForm extends JFrame{
 		priceTxt = new JTextField();
 		priceTxt.setBounds(90, 660, 170, 35);
 		priceTxt.setFont(new Font("Areal", Font.BOLD, 24));
-		
+		priceTxt.addKeyListener(new KeyAdapter() {
+		    public void keyTyped(KeyEvent evt) {
+		    	//this sets the limit for number of symbols user can type into the text field
+		        if(priceTxt.getText().length() >= 5 && !(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE ||
+		        		evt.getKeyChar() == KeyEvent.VK_DELETE)) {
+		            getToolkit().beep();
+		            evt.consume();
+		         }
+		        //Prevents the user from entering more than one decimal point symbol
+		        if(priceTxt.getText().indexOf(".") != -1 && (int)evt.getKeyChar() == 46){
+		        	getToolkit().beep();
+		        	evt.consume();
+		        }
+		        //this only allows digits and decimal point symbol to be entered
+		        //48 is the ASCI code for '0' and 57 is the ASCI code for '9'
+		        if(((int)evt.getKeyChar() < 48 || (int)evt.getKeyChar() > 57) && 
+		        		(!(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE || evt.getKeyChar() == KeyEvent.VK_DELETE ||
+		        		(int)evt.getKeyChar() == 46))) {
+		        	getToolkit().beep();
+		        	evt.consume();
+		        }
+		        
+		     }
+		});
 		
 		JLabel nameOnTicketLbl = new JLabel("Name on Ticket");
 		nameOnTicketLbl.setBounds(10, 710, 280, 30);
@@ -219,7 +241,19 @@ public class AddNewItemForm extends JFrame{
 		nameOnTicketTxt = new JTextField();
 		nameOnTicketTxt.setBounds(10, 740, 280, 35);
 		nameOnTicketTxt.setFont(new Font("Areal", Font.BOLD, 24));
+		nameOnTicketTxt.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent evt) {
+		    	//this sets the limit for number of symbols user can type into the text field
+		       if(nameOnTicketTxt.getText().length() >= 18 && !(evt.getKeyChar() == KeyEvent.VK_BACK_SPACE ||
+		        		evt.getKeyChar() == KeyEvent.VK_DELETE)) {
+		        	
+		    	   nameOnTicketTxt.getToolkit().beep();
+		            evt.consume();
+		        }
+	
+			}
 		
+		});
 		
 		//panel to hold control buttons
 		JPanel buttonPanel = new JPanel();
@@ -247,9 +281,6 @@ public class AddNewItemForm extends JFrame{
 		page2Btn.setBounds(439, 23, 207, 120);
 		page2Btn.setFont(new Font("Segoe UI", Font.BOLD, 32));
 		
-		deleteBtn = new JButton("Delete");
-		deleteBtn.setBounds(651, 23, 207, 120);
-		deleteBtn.setFont(new Font("Segoe UI", Font.BOLD, 32));
 		
 		finishedBtn = new JButton("Finished");
 		finishedBtn.setBounds(863, 23, 207, 120);
@@ -258,7 +289,6 @@ public class AddNewItemForm extends JFrame{
 		buttonPanel.add(saveBtn);
 		buttonPanel.add(page1Btn);
 		buttonPanel.add(page2Btn);
-		buttonPanel.add(deleteBtn);
 		buttonPanel.add(finishedBtn);
 		
 		this.add(button);
@@ -292,7 +322,6 @@ public class AddNewItemForm extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setTitle("Add New Item Form");
 		getContentPane().setBackground(UtilityParameters.SET_UP_MENU_COLOR);
-		this.setVisible(true);
 	}
 	
 	
@@ -302,7 +331,7 @@ public class AddNewItemForm extends JFrame{
 	 * Loads the arrayList with buttons
 	 * @param a an arrayList of JButtons
 	 */
-	public static void loadArray(ArrayList<JButton> a) {
+	public void loadArray(ArrayList<ItemSelectionMenuPanelButton> a) {
 		int x = 0;         //button x coordinate on the panel
 		int y = 0;         //button y coordinate on the panel 
 		int page = 1;      //
@@ -310,7 +339,7 @@ public class AddNewItemForm extends JFrame{
 		PreparedStatement stmt;
 		ResultSet rs;
 		String statement;
-		JButton but = null;
+		ItemSelectionMenuPanelButton but = null;
 		
 		try {
 			for(int i = 0; i < TOTAL_NUM_BUTTONS;i++) {
@@ -318,9 +347,10 @@ public class AddNewItemForm extends JFrame{
 					page = 2;
 				}
 			
-			
-				statement = "SELECT name_on_button, xcoord, ycoord, gap, im.filename FROM categories c "
-				+ "JOIN images im ON c.image_id = im.id WHERE xcoord ='"+ x +"' AND ycoord ='"+ y +"' AND page ='" + page + "'";
+				statement = "SELECT name_on_button, xcoord, ycoord, gap, im.filename FROM items it "
+						+ "JOIN images im ON it.image_id = im.id "
+						+ "WHERE category_id IN(SELECT id FROM categories WHERE name_on_button LIKE('"+ categoryName +"')) "
+						+ "AND xcoord ='"+ x +"' AND ycoord ='"+ y +"' AND page ='" + page + "'";
 				
 				stmt = con.prepareStatement(statement);
 				rs = stmt.executeQuery();
@@ -361,6 +391,40 @@ public class AddNewItemForm extends JFrame{
 			
 		
 	}
+	
+	/**
+	 *Validates user input
+	 *@return valid Returns valid if input is valid
+	 */
+	public boolean validateInput() {
+		boolean valid = true;
+		if(itemNameTxt.getText().length() == 0){
+			JOptionPane.showMessageDialog(null, "Category Name input is needed!");
+			valid = false;
+		}
+		else if(imageFileNameTxt.getText().length() == 0) {
+			JOptionPane.showMessageDialog(null, "Image File Name input is needed!");
+			valid = false;
+		}
+		else if(gapTxt.getText().length() == 0) {
+			JOptionPane.showMessageDialog(null, "Gap input is needed!");
+			valid = false;
+		}
+		else if(locationXTxt.getText().length() == 0 || locationYTxt.getText().length() == 0) {
+			JOptionPane.showMessageDialog(null, "Choose location for the category please!");
+			valid = false;
+		}
+		else if(priceTxt.getText().length() == 0 ) {
+			JOptionPane.showMessageDialog(null, "Enter item's price!");
+			valid = false;
+		}
+		else if(nameOnTicketTxt.getText().length() == 0 ) {
+			JOptionPane.showMessageDialog(null, "Name on ticket input is needed!");
+			valid = false;
+		}
+		return valid;
+	}
+	
 	/**
 	 *Gets Connection to Menu database 
 	 */
@@ -383,7 +447,7 @@ public class AddNewItemForm extends JFrame{
 	 *Gets Category name 
 	 *@return Category name 
 	 */
-	public String getCategoryName() {
+	public String getItemName() {
 		return itemNameTxt.getText();
 	}
 	/**
@@ -464,17 +528,40 @@ public class AddNewItemForm extends JFrame{
 		return locationPanelPage2;
 	}
 	/**
+	 *Sets category name 
+	 */
+	public void setCategoryName(String catName) {
+		categoryName = catName;
+	}
+	/**
+	 *Gets category name 
+	 */
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public String getPriceText() {
+		return priceTxt.getText();
+	}
+	
+	public void setNameOnTicket(String name) {
+		nameOnTicketTxt.setText(name);
+	}
+	
+	public String getNameOnTicket() {
+		return nameOnTicketTxt.getText();
+	}
+	/**
 	 *Gets list of location buttons
 	 *@return buttons The list of location buttons
 	 */
-	public ArrayList<JButton> getButtons(){
+	public ArrayList<ItemSelectionMenuPanelButton> getButtons(){
 		return buttons;
 	}
 	/**
 	 *Gets category name field
 	 *@return catNameTxt The category name textField
 	 */
-	public JTextField getCatNameField() {
+	public JTextField getItemNameField() {
 		return itemNameTxt;
 	}
 	/**
@@ -506,32 +593,10 @@ public class AddNewItemForm extends JFrame{
 		locationXTxt.setText("");
 		locationYTxt.setText("");
 		pageTxt.setText("");
+		priceTxt.setText("");
+		nameOnTicketTxt.setText("");
 	}
-	/**
-	 *Validates user input
-	 *@return valid Returns valid if input is valid
-	 */
-	public boolean validateInput() {
-		boolean valid = true;
-		if(itemNameTxt.getText().length() == 0){
-			JOptionPane.showMessageDialog(null, "Category Name input is needed!");
-			valid = false;
-		}
-		else if(imageFileNameTxt.getText().length() == 0) {
-			JOptionPane.showMessageDialog(null, "Image File Name input is needed!");
-			valid = false;
-		}
-		else if(gapTxt.getText().length() == 0) {
-			JOptionPane.showMessageDialog(null, "Gap input is needed!");
-			valid = false;
-		}
-		else if(locationXTxt.getText().length() == 0 || locationYTxt.getText().length() == 0) {
-			JOptionPane.showMessageDialog(null, "Choose location for the category please!");
-			valid = false;
-		}
-		
-		return valid;
-	}
+
 	/**
 	 *Click listener for the Save button
 	 *@param al The action listener
@@ -582,13 +647,7 @@ public class AddNewItemForm extends JFrame{
 	public void addPage2ClickListener(ActionListener al) {
 		page2Btn.addActionListener(al);
 	}
-	/**
-	 *Click listener for the Delete button
-	 *@param al The action listener
-	 */
-	public void addDeleteButtonListener(ActionListener al) {
-		deleteBtn.addActionListener(al);
-	}
+	
 	/**
 	 *Click listener for the Finished button
 	 *@param al The action listener
@@ -597,4 +656,7 @@ public class AddNewItemForm extends JFrame{
 		finishedBtn.addActionListener(al);
 	}
 	
+	public void addItemNameKeyListener (KeyListener cl) {
+		itemNameTxt.addKeyListener(cl);
+	}
 }

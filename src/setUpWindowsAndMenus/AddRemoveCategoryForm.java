@@ -40,7 +40,7 @@ public class AddRemoveCategoryForm extends JFrame{
 	private static final int BUTTON_WIDTH = 155;
 	private static final int BUTTON_HEIGHT = 155;
 	
-	private ArrayList<JButton> buttons;
+	private ArrayList<ItemSelectionMenuPanelButton> buttons;
 	private JLabel nameLbl;
 	private JButton button;           // sample button
 	private JPanel locationPanelPage1, locationPanelPage2;         //panels that hold location buttons
@@ -75,7 +75,7 @@ public class AddRemoveCategoryForm extends JFrame{
 		
 		
 		
-		buttons = new ArrayList<JButton>();
+		buttons = new ArrayList<ItemSelectionMenuPanelButton>();
 		loadArray(buttons);
 		//add buttons to location panels
 		for(int i = 0; i < buttons.size(); i++) {
@@ -276,7 +276,7 @@ public class AddRemoveCategoryForm extends JFrame{
 	 * Loads the arrayList with buttons
 	 * @param a an arrayList of JButtons
 	 */
-	public static void loadArray(ArrayList<JButton> a) {
+	public static void loadArray(ArrayList<ItemSelectionMenuPanelButton> a) {
 		int x = 0;         //button x coordinate on the panel
 		int y = 0;         //button y coordinate on the panel 
 		int page = 1;      //
@@ -284,7 +284,7 @@ public class AddRemoveCategoryForm extends JFrame{
 		PreparedStatement stmt;
 		ResultSet rs;
 		String statement;
-		JButton but = null;
+		ItemSelectionMenuPanelButton but = null;
 		
 		try {
 			for(int i = 0; i < TOTAL_NUM_BUTTONS;i++) {
@@ -441,7 +441,7 @@ public class AddRemoveCategoryForm extends JFrame{
 	 *Gets list of location buttons
 	 *@return buttons The list of location buttons
 	 */
-	public ArrayList<JButton> getButtons(){
+	public ArrayList<ItemSelectionMenuPanelButton> getButtons(){
 		return buttons;
 	}
 	/**
