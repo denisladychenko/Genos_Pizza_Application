@@ -103,7 +103,7 @@ private static final long serialVersionUID = 1L;
 		try {
 			stmt = con.createStatement();
 			String SQLStatement = "SELECT name, filename FROM images "
-								+ "WHERE image_group LIKE ('modifiers') "
+								+ "WHERE image_group LIKE ('modifier') "
 								+ "ORDER BY name ASC";
 			//get data from the DB
 			rs = stmt.executeQuery(SQLStatement);

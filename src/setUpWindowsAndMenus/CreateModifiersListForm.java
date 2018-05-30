@@ -79,7 +79,7 @@ public class CreateModifiersListForm extends JFrame{
 		modListLst.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		
 		modListScr = new JScrollPane(modListLst);
-		modListScr.setBounds(10, 300, 300, 240);
+		modListScr.setBounds(10, 300, 300, 270);
 		
 		locationPanelPage1 = new JPanel();
 		locationPanelPage1.setBounds(320, 10, 775, 775);
@@ -115,41 +115,42 @@ public class CreateModifiersListForm extends JFrame{
 		removeBtn = new JButton("Remove");
 		removeBtn.setBounds(165, 265, 80, 30);
 		
+		
 		JLabel locationLbl = new JLabel("Location");
-		locationLbl.setBounds(10, 550, 280, 30);
+		locationLbl.setBounds(10, 580, 280, 30);
 		locationLbl.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		locationLbl.setForeground(Color.YELLOW);
 		
 		
 		
 		locationXTxt = new JTextField();
-		locationXTxt.setBounds(10, 585, 80, 35);
+		locationXTxt.setBounds(10, 615, 80, 35);
 		locationXTxt.setFont(new Font("Areal", Font.BOLD, 24));
 		locationXTxt.setEditable(false);
 		
 		JLabel locationXLbl = new JLabel("X");
-		locationXLbl.setBounds(95, 585, 20, 30);
+		locationXLbl.setBounds(95, 615, 20, 30);
 		locationXLbl.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		locationXLbl.setForeground(Color.YELLOW);
 		
 		locationYTxt = new JTextField();
-		locationYTxt.setBounds(130, 585, 80, 35);
+		locationYTxt.setBounds(130, 615, 80, 35);
 		locationYTxt.setFont(new Font("Areal", Font.BOLD, 24));
 		locationYTxt.setEditable(false);
 		
 		JLabel locationYLbl = new JLabel("Y");
-		locationYLbl.setBounds(215, 585, 20, 30);
+		locationYLbl.setBounds(215, 615, 20, 30);
 		locationYLbl.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		locationYLbl.setForeground(Color.YELLOW);
 		
 		JLabel pageLbl = new JLabel("Page");
-		pageLbl.setBounds(10, 650, 280, 30);
+		pageLbl.setBounds(10, 670, 280, 30);
 		pageLbl.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		pageLbl.setForeground(Color.YELLOW);
 		
 		
 		pageTxt = new JTextField();
-		pageTxt.setBounds(90, 650, 170, 35);
+		pageTxt.setBounds(90, 670, 170, 35);
 		pageTxt.setFont(new Font("Areal", Font.BOLD, 24));
 		pageTxt.setEditable(false);
 		

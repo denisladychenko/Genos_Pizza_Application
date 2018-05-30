@@ -23,23 +23,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionListener;
 
 import pizzeria.exception_classes.PriceOutOfRange;
 import utility.parameters.UtilityParameters;
 import windows_and_menues.ItemSelectionMenuPanelButton;
 
-public class CreateModifierForm extends JFrame{
+public class EditModifierForm extends JFrame{
 
-
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
 	
-
 	private ItemSelectionMenuPanelButton button;           // sample button
 	private JTextField modNameTxt;                    //input field for modifier name
 	private JTextField imageFileNameTxt;              //text field for image file input
@@ -47,29 +43,29 @@ public class CreateModifierForm extends JFrame{
 	private JTextField priceTxt;                      //text field for the modifier price
 	private JTextField nameOnTicketTxt;               //text field for the modifier name on ticket
 	private JButton imageLookUpBtn;                   //button for image look up
-	private JButton editBtn,                           //button to open edit modifier form
-					deleteBtn;                          //button to delete modifier
-	private JButton createBtn,                             //button to create modifier in the database
+	private JButton deleteBtn;                          //button to delete modifier
+	private JButton saveBtn,                             //button to save modifier in the database
 					finishedBtn;                         //finish and exit button
 	private JScrollPane modListPane;                     //scroll pane for the list of modifiers
 	private JList<DefaultListModel> modListLst;                    //list to hold modifier items
-	private DefaultListModel<String> listModel;
+	private String selectedModName;                      //selected modifier
+	private DefaultListModel listModel;
 	
-	public CreateModifierForm(){
+	public EditModifierForm(){
 		
 		button = new ItemSelectionMenuPanelButton("empty_img.png","",0, 80,50, 155, 155);
 		
 		loadModifiersArray();                  //load modifiers into array list
+		
 		
 		JLabel titleLbl = new JLabel("Existing Modifiers ");
 		titleLbl.setBounds(590, 15, 300, 35);
 		titleLbl.setFont(new Font("Areal", Font.BOLD, 28));
 		titleLbl.setForeground(Color.YELLOW);
 		
-		modListLst = new JList(listModel);
-		modListLst.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		modListLst = new JList<DefaultListModel>(listModel);
 		modListLst.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		
+	
 		
 		
 		modListPane = new JScrollPane(modListLst);
@@ -247,15 +243,10 @@ public class CreateModifierForm extends JFrame{
 		buttonPanel.setBorder(BorderFactory.createCompoundBorder(comp, compInner));
 		buttonPanel.setBackground(UtilityParameters.SET_UP_MENU_COLOR);
 		
-		createBtn = new JButton("Create");
-		createBtn.setBounds(15, 23, 207, 120);
-		createBtn.setFont(new Font("Segoe UI", Font.BOLD, 32));
+		saveBtn = new JButton("Save");
+		saveBtn.setBounds(15, 23, 207, 120);
+		saveBtn.setFont(new Font("Segoe UI", Font.BOLD, 32));
 		
-		editBtn = new JButton("Edit");
-		editBtn.setBounds(300, 23, 207, 120);
-		editBtn.setFont(new Font("Segoe UI", Font.BOLD, 32));
-		editBtn.setToolTipText("Select Modifier from the list and then hit Edit to open the Edit Form");
-		editBtn.setVisible(false);
 		
 		deleteBtn = new JButton("Delete");
 		deleteBtn.setBounds(580, 23, 207, 120);
@@ -265,8 +256,7 @@ public class CreateModifierForm extends JFrame{
 		finishedBtn.setBounds(863, 23, 207, 120);
 		finishedBtn.setFont(new Font("Segoe UI", Font.BOLD, 32));
 		
-		buttonPanel.add(createBtn);
-		buttonPanel.add(editBtn);
+		buttonPanel.add(saveBtn);
 		buttonPanel.add(finishedBtn);
 		buttonPanel.add(deleteBtn);
 		
@@ -291,9 +281,8 @@ public class CreateModifierForm extends JFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(null);
 		this.setLocationRelativeTo(null);
-		this.setTitle("Create Modifier Form");
+		this.setTitle("Edit Modifier Form");
 		getContentPane().setBackground(UtilityParameters.SET_UP_MENU_COLOR);
-		this.setVisible(true);
 	}
 	
 	/**
@@ -302,18 +291,6 @@ public class CreateModifierForm extends JFrame{
 	 */
 	public ItemSelectionMenuPanelButton getButton() {
 		return  (ItemSelectionMenuPanelButton) button;
-	}
-	
-	public JList<DefaultListModel> getModList(){
-		return modListLst;
-	}
-	
-	public DefaultListModel<String> getListModel(){
-		return listModel;
-	}
-	
-	public JButton getEditButton() {
-		return editBtn;
 	}
 	
 	/**
@@ -336,6 +313,31 @@ public class CreateModifierForm extends JFrame{
 	public JTextField getNameOnTicket() {
 		return nameOnTicketTxt;
 	}
+	public void setSelectedModName(String modName) {
+		selectedModName = modName;
+	}
+	public String getSelectedModName() {
+		return selectedModName;
+	}
+	/**
+	 *Gets Connection to Menu database 
+	 */
+	public static Connection getDatabaseConnection() {
+		Connection con = null;
+		try {
+			Class.forName("org.postgresql.Driver");
+			con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/menu", "postgres", "AK47M4M16MP5PX4M249");
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Database driver was not found!");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Connection can not be established!");
+		}
+		return con;
+	}
+	
 	/**
 	 *Validates user input
 	 *@return valid Returns valid if input is valid
@@ -370,36 +372,6 @@ public class CreateModifierForm extends JFrame{
 		return valid;
 	}
 	
-	public void clearForm() {
-		button.setButtonIcon("empty_img.png");
-		button.setButtonText("");
-		button.setButtonGap(0);
-		modNameTxt.setText("");
-		imageFileNameTxt.setText("");
-		gapTxt.setText("0");
-		priceTxt.setText("");
-		nameOnTicketTxt.setText("");
-	}
-	
-	/**
-	 *Gets Connection to Menu database 
-	 */
-	public static Connection getDatabaseConnection() {
-		Connection con = null;
-		try {
-			Class.forName("org.postgresql.Driver");
-			con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/menu", "postgres", "AK47M4M16MP5PX4M249");
-			
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, "Database driver was not found!");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, "Connection can not be established!");
-		}
-		return con;
-	}
-	
 	public void loadModifiersArray() {
 		listModel = new DefaultListModel<String>();
 		Connection con = getDatabaseConnection();
@@ -422,12 +394,6 @@ public class CreateModifierForm extends JFrame{
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public void addImageButtonListener(ActionListener al) {
-		imageLookUpBtn.addActionListener(al);
-	}
-	
 	/**
 	 *Change listener for the image name field
 	 *@param dl The document listener
@@ -435,17 +401,7 @@ public class CreateModifierForm extends JFrame{
 	public void addImageNameChangeListener(DocumentListener dl) {
 		imageFileNameTxt.getDocument().addDocumentListener(dl);
 	}
-	
-	public void addCreateButtonListener(ActionListener al) {
-		createBtn.addActionListener(al);
-	}
-	public void addEditButtonListener(ActionListener al) {
-		editBtn.addActionListener(al);
-	}
-	public void addDeleteButtonListener(ActionListener al) {
-		deleteBtn.addActionListener(al);
-	}
-	public void addModifierListSelectionListener(ListSelectionListener lsl) {
-		modListLst.addListSelectionListener(lsl);
+	public void addSaveButtonClickListener(ActionListener al) {
+		saveBtn.addActionListener(al);
 	}
 }
