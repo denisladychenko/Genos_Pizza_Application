@@ -7,6 +7,9 @@ import javax.swing.SwingUtilities;
 
 import setUpWindowsAndMenus.CreateModifierController;
 import setUpWindowsAndMenus.CreateModifierForm;
+import setUpWindowsAndMenus.CreateModifiersListController;
+import setUpWindowsAndMenus.CreateModifiersListForm;
+import setUpWindowsAndMenus.EditModFormImageSelectorForm;
 import setUpWindowsAndMenus.EditModifierForm;
 import setUpWindowsAndMenus.ModifierImageSelectorForm;
 import windows_and_menues.MainMenu;
@@ -41,10 +44,14 @@ public class GenosPizza {
 	            	new AddRemoveMenuItemController(addRemoveMenuItemForm, new EditItemForm(),
 	            	new ItemImageSelectorForm(), new AddNewItemController(new AddNewItemForm(),addRemoveMenuItemForm));*/
 	            	//new AddModifiersListToItemForm();
-	            	new CreateModifierController(new CreateModifierForm(), new ModifierImageSelectorForm(), new EditModifierForm());
 	            	
-	            	//new CreateModifiersListForm();
-	            	//new EditModifierForm();
+	            	
+	            	new CreateModifiersListController(new CreateModifiersListForm(),
+	            			new CreateModifierController(new CreateModifierForm(),
+	    	            			new ModifierImageSelectorForm(),
+	    	            			new EditModifierForm(),
+	    	            			new EditModFormImageSelectorForm()));
+	            	
 	            }
 	        });
 		

@@ -293,7 +293,6 @@ public class CreateModifierForm extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setTitle("Create Modifier Form");
 		getContentPane().setBackground(UtilityParameters.SET_UP_MENU_COLOR);
-		this.setVisible(true);
 	}
 	
 	/**
@@ -344,7 +343,7 @@ public class CreateModifierForm extends JFrame{
 	public boolean validateInput() throws PriceOutOfRange {
 		boolean valid = true;
 		if(modNameTxt.getText().length() == 0){
-			JOptionPane.showMessageDialog(null, "Category Name input is needed!");
+			JOptionPane.showMessageDialog(null, "Modifier Name input is needed!");
 			valid = false;
 		}
 		else if(imageFileNameTxt.getText().length() == 0) {

@@ -43,7 +43,6 @@ private static final long serialVersionUID = 1L;
 	private JTextField priceTxt;                      //text field for the modifier price
 	private JTextField nameOnTicketTxt;               //text field for the modifier name on ticket
 	private JButton imageLookUpBtn;                   //button for image look up
-	private JButton deleteBtn;                          //button to delete modifier
 	private JButton saveBtn,                             //button to save modifier in the database
 					finishedBtn;                         //finish and exit button
 	private JScrollPane modListPane;                     //scroll pane for the list of modifiers
@@ -248,9 +247,7 @@ private static final long serialVersionUID = 1L;
 		saveBtn.setFont(new Font("Segoe UI", Font.BOLD, 32));
 		
 		
-		deleteBtn = new JButton("Delete");
-		deleteBtn.setBounds(580, 23, 207, 120);
-		deleteBtn.setFont(new Font("Segoe UI", Font.BOLD, 32));
+
 		
 		finishedBtn = new JButton("Finished");
 		finishedBtn.setBounds(863, 23, 207, 120);
@@ -258,7 +255,7 @@ private static final long serialVersionUID = 1L;
 		
 		buttonPanel.add(saveBtn);
 		buttonPanel.add(finishedBtn);
-		buttonPanel.add(deleteBtn);
+
 		
 		this.add(gapLbl);
 		this.add(gapTxt);
@@ -318,6 +315,9 @@ private static final long serialVersionUID = 1L;
 	}
 	public String getSelectedModName() {
 		return selectedModName;
+	}
+	public DefaultListModel<String> getListModel(){
+		return listModel;
 	}
 	/**
 	 *Gets Connection to Menu database 
@@ -403,5 +403,11 @@ private static final long serialVersionUID = 1L;
 	}
 	public void addSaveButtonClickListener(ActionListener al) {
 		saveBtn.addActionListener(al);
+	}
+	public void addFinishedButtonClickListener(ActionListener al) {
+		finishedBtn.addActionListener(al);
+	}
+	public void addImageLookUpButtonClickListener(ActionListener al) {
+		imageLookUpBtn.addActionListener(al);
 	}
 }

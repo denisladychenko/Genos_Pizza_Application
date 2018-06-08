@@ -3,6 +3,7 @@ package setUpWindowsAndMenus;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,7 +30,8 @@ import windows_and_menues.ItemSelectionMenuPanelButton;
 
 public class CreateModifiersListForm extends JFrame{
 
-	
+	ArrayList<int []> listOfCoords;                         //list of coordinates of the locations that
+															//has been already taken for other modifiers
 	private static final long serialVersionUID = 1L;
 
 	private static final int TOTAL_NUM_BUTTONS = 50;
@@ -37,9 +40,7 @@ public class CreateModifiersListForm extends JFrame{
 	private static final int BUTTON_WIDTH = 155;
 	private static final int BUTTON_HEIGHT = 155;
 	
-	
-	private ArrayList<String> modLists;
-	private String[] modifierLists;
+
 	private ArrayList<ItemSelectionMenuPanelButton> buttons;       //grid buttons
 	private JPanel locationPanelPage1, locationPanelPage2;         //panels that hold location buttons
 	private JButton page1Btn,                            //button to go to page 1
@@ -49,6 +50,9 @@ public class CreateModifiersListForm extends JFrame{
 	private JButton newListBtn;                         //button to create new list of modifiers
 	private JButton addBtn,                             //adds button to the list
 					removeBtn;                         //removes item from the list
+	private DefaultListModel<String> modListModel;       //The list of available modifiers to choose from
+	private DefaultListModel<String> modsInTheListModel;   //modifiers that are included in the modifiers list
+	                                                       //for the item
 	private JList<String> listOfModLst;                              //list of existing modifiers
 	private JScrollPane listOfModScr;            
 	private JList<String> modListLst;                              //new modifiers list
@@ -60,22 +64,24 @@ public class CreateModifiersListForm extends JFrame{
 	
 	public CreateModifiersListForm() {
 		
+		listOfCoords = new ArrayList<int []>();
+		
 		JLabel titleLbl = new JLabel("List of Modifiers");
 		titleLbl.setBounds(70, 5, 300, 30);
 		titleLbl.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		titleLbl.setForeground(Color.YELLOW);
 		
 		loadListsArray();
-		converToArray();
-		listOfModLst = new JList<String>(modifierLists);
+		listOfModLst = new JList<String>(modListModel);
 		listOfModLst.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		if(modifierLists.length != 0)
+		if(modListModel.getSize() != 0)
 			listOfModLst.setSelectedIndex(0);
 		
 		listOfModScr = new JScrollPane(listOfModLst);
 		listOfModScr.setBounds(10, 40, 300, 220);
 		
-		modListLst = new JList<String>();
+		modsInTheListModel = new DefaultListModel<String>();
+		modListLst = new JList<String>(modsInTheListModel);
 		modListLst.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		
 		modListScr = new JScrollPane(modListLst);
@@ -90,6 +96,7 @@ public class CreateModifiersListForm extends JFrame{
 		locationPanelPage2.setLayout(null);
 			
 		buttons = new ArrayList<ItemSelectionMenuPanelButton>();
+		
 		
 		loadArray(buttons);
 		//add buttons to location panels
@@ -120,7 +127,6 @@ public class CreateModifiersListForm extends JFrame{
 		locationLbl.setBounds(10, 580, 280, 30);
 		locationLbl.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		locationLbl.setForeground(Color.YELLOW);
-		
 		
 		
 		locationXTxt = new JTextField();
@@ -195,7 +201,6 @@ public class CreateModifiersListForm extends JFrame{
 		buttonPanel.add(page1Btn);
 		buttonPanel.add(page2Btn);
 		buttonPanel.add(finishedBtn);
-		this.add(modListLst);
 		this.add(modListScr);
 		this.add(locationLbl);
 		this.add(pageLbl);
@@ -219,6 +224,44 @@ public class CreateModifiersListForm extends JFrame{
 		this.setVisible(true);
 	}
 	
+	public JList getListOfMods() {
+		return listOfModLst;
+	}
+	public JList getModList() {
+		return modListLst;
+	}
+	public ArrayList<ItemSelectionMenuPanelButton> getButtons(){
+		return buttons;
+	}
+	public void setPageText(int page) {
+		pageTxt.setText(Integer.toString(page));
+	}
+	public int getPage() {
+		return Integer.parseInt(pageTxt.getText());
+	}
+	
+	public void setLocationXCoord(int x) {
+		locationXTxt.setText(Integer.toString(x));
+	}
+	public void setLocationYCoord(int y) {
+		locationYTxt.setText(Integer.toString(y));
+	}
+	public int getXcoord() {
+		if(locationXTxt.getText()!= null)
+			return Integer.parseInt(locationXTxt.getText());
+		else
+			throw new NumberFormatException();
+	}
+	public int getYcoord() {
+		if(locationYTxt.getText()!= null)
+			return Integer.parseInt(locationYTxt.getText());
+		else
+			throw new NumberFormatException();
+	}
+	public ArrayList<int []> getListOfCoords(){
+		return listOfCoords;
+	}
+	
 	/**
 	 *Gets Connection to Menu database 
 	 */
@@ -239,7 +282,7 @@ public class CreateModifiersListForm extends JFrame{
 	}
 	
 	public void loadListsArray() {
-		modLists = new ArrayList<>();
+		modListModel = new DefaultListModel<String>();
 		Connection con = getDatabaseConnection();
 		PreparedStatement stmt;
 		ResultSet rs;
@@ -247,13 +290,13 @@ public class CreateModifiersListForm extends JFrame{
 		
 		try {
 			
-			statement = "SELECT name FROM modifiers_list "
-					+ "ORDER BY name ASC";
+			statement = "SELECT name_on_button FROM modifiers "
+					+ "ORDER BY name_on_button ASC";
 			stmt = con.prepareStatement(statement);
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				modLists.add(rs.getString("name"));
+				modListModel.addElement(rs.getString("name_on_button"));
 			}		
 		
 		}catch(SQLException e) {
@@ -261,12 +304,6 @@ public class CreateModifiersListForm extends JFrame{
 		}
 	}
 	
-	public void converToArray() {
-		modifierLists = new String[modLists.size()];
-		for(int i = 0; i < modifierLists.length; i++) {
-			modifierLists[i] = modLists.get(i);
-		}
-	}
 	
 	/** 
 	 * Loads the arrayList with buttons
@@ -334,5 +371,47 @@ public class CreateModifiersListForm extends JFrame{
 			}
 			
 		
+	}
+	
+	public void addAddButtonClickListener(ActionListener al) {
+		addBtn.addActionListener(al);
+	}
+	public void addRemoveButtonClickListener(ActionListener al) {
+		removeBtn.addActionListener(al);
+	}
+	public void addCreateModifiersButtonClickListener(ActionListener al) {
+		newListBtn.addActionListener(al);
+	}
+	public void addSaveButtonClickListener(ActionListener al) {
+		saveBtn.addActionListener(al);
+	}
+	public void addFinishedButtonClickListener(ActionListener al) {
+		finishedBtn.addActionListener(al);
+	}
+	public void addPage1ButtonClickListener(ActionListener al) {
+		page1Btn.addActionListener(al);
+	}
+	public void addPage2ButtonClickListener(ActionListener al) {
+		page2Btn.addActionListener(al);
+	}
+	public void addLocationButtonClickListener(ActionListener al) {
+		int size = buttons.size();
+		for(int i = 0; i < size; i++) {
+			buttons.get(i).addActionListener(al);
+		}
+	}
+	/**
+	 *Gets location panel page 1
+	 *@return locationPanelPage1 The location panel page 1
+	 */
+	public JPanel getLocationPanelPage1() {
+		return locationPanelPage1;
+	}
+	/**
+	 *Gets location panel page 2
+	 *@return locationPanelPage1 The location panel page 2
+	 */
+	public JPanel getLocationPanelPage2() {
+		return locationPanelPage2;
 	}
 }

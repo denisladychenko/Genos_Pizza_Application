@@ -7,7 +7,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
@@ -23,11 +28,16 @@ public class CreateModifierController {
 	private CreateModifierForm view;
 	private ModifierImageSelectorForm imageForm;
 	private EditModifierForm editModForm;
+	private EditModFormImageSelectorForm editModImageForm;
 	
-	public CreateModifierController(CreateModifierForm view, ModifierImageSelectorForm imageForm, EditModifierForm editModForm) {
+	public CreateModifierController(CreateModifierForm view,
+			ModifierImageSelectorForm imageForm,
+			EditModifierForm editModForm,
+			EditModFormImageSelectorForm editModImageForm) {
 		this.view = view;
 		this.imageForm = imageForm;
 		this.editModForm = editModForm;
+		this.editModImageForm = editModImageForm;
 		this.view.addImageButtonListener(new ImageButtonClickListener());
 		this.view.addImageNameChangeListener(new ImageNameChangeListener());
 		this.view.addCreateButtonListener(new CreateButtonListener());
@@ -38,8 +48,18 @@ public class CreateModifierController {
 		this.imageForm.addCancelBtnListener(new CancelButtonClickListener());
 		this.editModForm.addImageNameChangeListener(new EditFormImageChangeListener());
 		this.editModForm.addSaveButtonClickListener(new SaveButtonClickListener());
+		this.editModForm.addFinishedButtonClickListener(new EditModFormFinishedClickListener());
+		this.editModForm.addImageLookUpButtonClickListener(new EditFormImageButtonClickListener());
+		this.editModImageForm.addOkBtnListener(new ImageFormOkButtonClickListener());
+		this.editModImageForm.addCancelBtnListener(new ImageFormCancelButtonClickListener());
 	}
 	
+	public CreateModifierForm getView() {
+		return view;
+	}
+	public EditModifierForm getEditModForm() {
+		return editModForm;
+	}
 	/**
 	 *Gets Connection to Menu database 
 	 */
@@ -57,6 +77,45 @@ public class CreateModifierController {
 			JOptionPane.showMessageDialog(null, "Connection can not be established!");
 		}
 		return con;
+	}
+	/**
+	 *Replaces the old item with the new one
+	 *Inserts new item into the modifiers list in alphabetical order 
+	 *@param listModel The list of items in the list
+	 *@param prevName The name of the item before change
+	 *@param newName The new name of the item
+	 */
+	
+	public void updateModList(DefaultListModel<String> listModel, String prevName, String newName) {
+		//remove the old item
+		listModel.removeElementAt(listModel.indexOf(prevName));
+		//add new element
+		listModel.addElement(newName);
+		sortModList(listModel);
+	}
+	
+	public static void sortModList(DefaultListModel<String> listModel) {
+		//store list items in the list
+		List<String> list = Collections.list(listModel.elements());
+		//sort updated list in alphabetical order
+		Collections.sort(list, new Comparator<String>(){
+
+		@Override
+		public int compare(String arg0, String arg1) {
+					
+			if(arg0.compareToIgnoreCase(arg1) < 0)
+				return -1;
+			else if(arg0.compareToIgnoreCase(arg1) > 0)
+				return 1;
+			return 0;
+			}
+		});
+		//remove all items from the list model
+		listModel.clear();
+		//add sorted items in the list model
+		for(String o: list) {
+			listModel.addElement(o);
+		}
 	}
 	
 	public void deleteModifier(String name) {
@@ -94,15 +153,36 @@ public class CreateModifierController {
 		}
 	}
 	
-	public void addItemToModList() {
-		view.getListModel().addElement(view.getModNameTextField().getText());
+	public void addItemToModList(JFrame form) {
+		if(form instanceof CreateModifierForm) {
+			CreateModifierForm frame = (CreateModifierForm) form;
+			frame.getListModel().addElement(frame.getModNameTextField().getText());
+			sortModList(frame.getListModel());
+		}
+		else if(form instanceof EditModifierForm) {
+			EditModifierForm frame = (EditModifierForm) form;
+			frame.getListModel().addElement(view.getModNameTextField().getText());
+			sortModList(frame.getListModel());
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Can't do anything with the item you passed to the function");
+		}
 	}
 	
-	public void removeItemFromModList() {
-		view.getListModel().removeElementAt(view.getModList().getSelectedIndex());
+	public void removeItemFromModList(JFrame form, int index) {
+		if(form instanceof CreateModifierForm) {
+			CreateModifierForm frame = (CreateModifierForm) form;
+			frame.getListModel().removeElementAt(frame.getModList().getSelectedIndex());
+		}
+		else if(form instanceof EditModifierForm) {
+			EditModifierForm frame = (EditModifierForm) form;
+			frame.getListModel().removeElementAt(index);
+		}
 	}
 	
 	public void loadModifierInfo() {
+		if(editModForm.getSelectedModName() == null)
+			return;
 		String modName = editModForm.getSelectedModName();    //the one that was selected from the list
 		Connection con = getDatabaseConnection();
 		PreparedStatement stmt;
@@ -118,6 +198,7 @@ public class CreateModifierController {
 			rs.next(); 
 			editModForm.getModNameTextField().setText(rs.getString("name_on_button"));
 			editModForm.getGap().setText(Integer.toString(rs.getInt("gap")));
+			editModForm.getButton().setButtonGap(rs.getInt("gap"));
 			editModForm.getPrice().setText(String.format("%.2f",rs.getDouble("price")));
 			editModForm.getNameOnTicket().setText(rs.getString("name_on_ticket"));
 			
@@ -208,6 +289,22 @@ public class CreateModifierController {
 				
 			}	
 	}
+	
+	class ImageFormOkButtonClickListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+					editModImageForm.getImageTree().getLastSelectedPathComponent();
+			 Object nodeInfo = node.getUserObject();
+			 ImageInfo img = (ImageInfo)nodeInfo;
+			 //insert image filename into the Category name field
+			 editModForm.getImageFileNameTextField().setText(img.getFileName());
+			 editModImageForm.dispose();
+			
+		}	
+}
+	
 	class CancelButtonClickListener implements ActionListener{
 
 		@Override
@@ -216,11 +313,30 @@ public class CreateModifierController {
 		}
 		
 	}
+	
+	class ImageFormCancelButtonClickListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			editModImageForm.dispose();		
+		}
+		
+	}
+	
 	class ImageButtonClickListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			imageForm.setVisible(true);			
+		}
+		
+	}
+	
+	class EditFormImageButtonClickListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			editModImageForm.setVisible(true);			
 		}
 		
 	}
@@ -280,7 +396,8 @@ public class CreateModifierController {
 				if(view.validateInput()){
 					if(!modifierExist()) {
 						addModifierToDatabase();
-						addItemToModList();
+						addItemToModList(view);
+						addItemToModList(editModForm);
 						view.clearForm();
 					}
 					else {
@@ -298,7 +415,19 @@ public class CreateModifierController {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			//updates modifiers info in the database
 			editModifierInfo();
+			//updates modifiers list at Edit Modifier Form
+			updateModList(editModForm.getListModel(),
+					editModForm.getSelectedModName(),
+					editModForm.getModNameTextField().getText());
+			//updates modifiers list at Create Modifier Form
+			updateModList(view.getListModel(),
+					editModForm.getSelectedModName(),
+					editModForm.getModNameTextField().getText());
+			editModForm.dispose();
+			
+			
 			
 		}
 		
@@ -308,8 +437,15 @@ public class CreateModifierController {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			editModForm.setVisible(true);
-			loadModifierInfo();
+			if(editModForm.getSelectedModName() != null) {				
+				editModForm.setVisible(true);
+				loadModifierInfo();
+				view.dispose();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Select item from the list to edit!");
+			}
+				
 		}
 		
 	}
@@ -317,10 +453,24 @@ public class CreateModifierController {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			int index;    //index of selected list item
-			index = view.getModList().getSelectedIndex();
-			deleteModifier(view.getListModel().getElementAt(index));
-			removeItemFromModList();
+			if(JOptionPane.showConfirmDialog(null,
+					"Are you sure you want to delete " + editModForm.getSelectedModName() + " \nfrom Modifiers?") == 0) {
+				int index;    //index of selected list item
+				index = view.getModList().getSelectedIndex();
+				deleteModifier(view.getListModel().getElementAt(index));
+				removeItemFromModList(view, index);
+				removeItemFromModList(editModForm, index);
+			}
+		}
+		
+	}
+	
+	class EditModFormFinishedClickListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			editModForm.dispose();
+			view.setVisible(true);
 		}
 		
 	}
