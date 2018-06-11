@@ -29,10 +29,13 @@ public class CreateModifierController {
 	private ModifierImageSelectorForm imageForm;
 	private EditModifierForm editModForm;
 	private EditModFormImageSelectorForm editModImageForm;
+	private CreateModifiersListForm parentForm;           //form that opens this form
 	
+	
+	// constructor
 	public CreateModifierController(CreateModifierForm view,
-			ModifierImageSelectorForm imageForm,
-			EditModifierForm editModForm,
+			ModifierImageSelectorForm imageForm,            //image form
+			EditModifierForm editModForm,                   //edit modifier form
 			EditModFormImageSelectorForm editModImageForm) {
 		this.view = view;
 		this.imageForm = imageForm;
@@ -44,6 +47,7 @@ public class CreateModifierController {
 		this.view.addModifierListSelectionListener(new ModifierListSelectionListener());
 		this.view.addEditButtonListener(new EditButtonListener());
 		this.view.addDeleteButtonListener(new DeleteButtonClickListener());
+		this.view.addFinishedButtonListener(new FinishedButtonClickListener());
 		this.imageForm.addOkBtnListener(new OkButtonClickListener());
 		this.imageForm.addCancelBtnListener(new CancelButtonClickListener());
 		this.editModForm.addImageNameChangeListener(new EditFormImageChangeListener());
@@ -53,10 +57,24 @@ public class CreateModifierController {
 		this.editModImageForm.addOkBtnListener(new ImageFormOkButtonClickListener());
 		this.editModImageForm.addCancelBtnListener(new ImageFormCancelButtonClickListener());
 	}
-	
+	/**
+	 *Sets parent of the form
+	 *@param parentForm parent form
+	 **/
+	public void setParentForm(CreateModifiersListForm parentForm) {
+		this.parentForm = parentForm;
+	}
+	/**
+	 *method to get view form
+	 *@return view CreateModifierForm
+	 **/
 	public CreateModifierForm getView() {
 		return view;
 	}
+	/**
+	 *method to get EditModifierForm form
+	 *@return editModForm EditModifierForm
+	 **/
 	public EditModifierForm getEditModForm() {
 		return editModForm;
 	}
@@ -93,7 +111,10 @@ public class CreateModifierController {
 		listModel.addElement(newName);
 		sortModList(listModel);
 	}
-	
+	/**
+	 *Sorts list model in an alphabetical order
+	 *@param listModel Model for the JList 
+	 */
 	public static void sortModList(DefaultListModel<String> listModel) {
 		//store list items in the list
 		List<String> list = Collections.list(listModel.elements());
@@ -117,12 +138,15 @@ public class CreateModifierController {
 			listModel.addElement(o);
 		}
 	}
-	
+	/**
+	 *method to delete modifier from database
+	 *@param name The name of modifier to be deleted from db 
+	 */
 	public void deleteModifier(String name) {
 		Connection con = getDatabaseConnection();
 		PreparedStatement stmt;
 		String statement;
-		
+		//delete modifier with particular name
 		statement = "DELETE FROM modifiers "
 				+ "WHERE name_on_button LIKE('"+ name +"')";
 		try {
@@ -132,12 +156,14 @@ public class CreateModifierController {
 			ex.printStackTrace();
 		}
 	}
-	
+	/**
+	 *Method to edit modifier's info in the database
+	 */
 	public void editModifierInfo() {
 		Connection con = getDatabaseConnection();
 		PreparedStatement stmt;
 		String statement;
-		
+		//updates modifier's into at database to whatever user entered into input fields
 		statement = "UPDATE modifiers "
 				+ "SET name_on_button = '"+ editModForm.getModNameTextField().getText() +"', "
 				+ "name_on_ticket = '"+ editModForm.getNameOnTicket().getText() +"', "
@@ -152,8 +178,12 @@ public class CreateModifierController {
 			ex.printStackTrace();
 		}
 	}
-	
+	/**
+	 *Method to add modifier to the list data model
+	 *@param form The form at which list model should be updated 
+	 */
 	public void addItemToModList(JFrame form) {
+	//determine at which form to update listModel.
 		if(form instanceof CreateModifierForm) {
 			CreateModifierForm frame = (CreateModifierForm) form;
 			frame.getListModel().addElement(frame.getModNameTextField().getText());
@@ -168,7 +198,11 @@ public class CreateModifierController {
 			JOptionPane.showMessageDialog(null, "Can't do anything with the item you passed to the function");
 		}
 	}
-	
+	/**
+	 *Method to remove item from the list model
+	 *@param form The form at which list model should be updated
+	 *@index of selected element 
+	 */
 	public void removeItemFromModList(JFrame form, int index) {
 		if(form instanceof CreateModifierForm) {
 			CreateModifierForm frame = (CreateModifierForm) form;
@@ -179,7 +213,10 @@ public class CreateModifierController {
 			frame.getListModel().removeElementAt(index);
 		}
 	}
-	
+	/**
+	 *Method to load modifier's info into the Edit Form
+	 * 
+	 */
 	public void loadModifierInfo() {
 		if(editModForm.getSelectedModName() == null)
 			return;
@@ -189,7 +226,7 @@ public class CreateModifierController {
 		ResultSet rs;
 		String statement;
 		
-		
+		//retrieve modifier's info from db
 		statement = "SELECT * FROM modifiers "
 				+ "WHERE name_on_button LIKE('"+ modName +"')";
 		try {
@@ -201,7 +238,7 @@ public class CreateModifierController {
 			editModForm.getButton().setButtonGap(rs.getInt("gap"));
 			editModForm.getPrice().setText(String.format("%.2f",rs.getDouble("price")));
 			editModForm.getNameOnTicket().setText(rs.getString("name_on_ticket"));
-			
+			//get image filename form images table in db
 			statement = "SELECT filename FROM images "
 					+ "WHERE id IN('"+ rs.getInt("image_id") +"')";
 			stmt = con.prepareStatement(statement);
@@ -215,12 +252,14 @@ public class CreateModifierController {
 		}
 		editModForm.getButton().setButtonText(modName);		
 	}
-	
+	/**
+	 *Method to add modifier to database
+	 */
 	public void addModifierToDatabase() {
 		Connection con = getDatabaseConnection();
 		PreparedStatement stmt;
 		String statement;
-		
+		//adds modifier into database
 		statement = "INSERT INTO modifiers (name_on_button, name_on_ticket, image_id, price, gap) "
 				+ "VALUES ('"+ view.getModNameTextField().getText() +"',"
 				+ "'"+ view.getNameOnTicket().getText() +"',"
@@ -274,7 +313,9 @@ public class CreateModifierController {
 			}
 			return false;
 	}
-	
+	/**
+	 *Click listener for Ok button at the imageForm  for Create Modifier Form
+	 */
 	class OkButtonClickListener implements ActionListener{
 
 			@Override
@@ -289,7 +330,9 @@ public class CreateModifierController {
 				
 			}	
 	}
-	
+	/**
+	 *Click listener for Ok button at the imageForm for Edit Modifier Form
+	 */
 	class ImageFormOkButtonClickListener implements ActionListener{
 
 		@Override
@@ -303,8 +346,10 @@ public class CreateModifierController {
 			 editModImageForm.dispose();
 			
 		}	
-}
-	
+	}
+	/**
+	 *Click listener for Cancel button at the imageForm for Create Modifier Form
+	 */
 	class CancelButtonClickListener implements ActionListener{
 
 		@Override
@@ -313,7 +358,9 @@ public class CreateModifierController {
 		}
 		
 	}
-	
+	/**
+	 *Click listener for Cancel button at the imageForm for Edit Modifier Form
+	 */
 	class ImageFormCancelButtonClickListener implements ActionListener{
 
 		@Override
@@ -322,7 +369,9 @@ public class CreateModifierController {
 		}
 		
 	}
-	
+	/**
+	 *Click listener for image button for Create Modifier Form
+	 */
 	class ImageButtonClickListener implements ActionListener{
 
 		@Override
@@ -331,7 +380,9 @@ public class CreateModifierController {
 		}
 		
 	}
-	
+	/**
+	 *Click listener for image button for Edit Modifier Form
+	 */
 	class EditFormImageButtonClickListener implements ActionListener{
 
 		@Override
@@ -342,7 +393,7 @@ public class CreateModifierController {
 	}
 	
 	/**
-	 *Change listener for Image name field
+	 *Change listener for Image name field for Create Modifier Form
 	 */
 	class ImageNameChangeListener implements DocumentListener{
 
@@ -365,7 +416,9 @@ public class CreateModifierController {
 		}
 		
 	}
-	
+	/**
+	 *Change listener for Image name field for Edit Modifier Form
+	 */
 	class EditFormImageChangeListener implements DocumentListener{
 
 		@Override
@@ -387,18 +440,25 @@ public class CreateModifierController {
 		}
 	
 	}
-	
+	/**
+	 *Create button listener
+	 */
 	class CreateButtonListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
+				//if input is valid and modifier does not exist
+				//create modifier
 				if(view.validateInput()){
 					if(!modifierExist()) {
 						addModifierToDatabase();
+						//update JLists 
 						addItemToModList(view);
 						addItemToModList(editModForm);
 						view.clearForm();
+						//update JList at parent form
+						parentForm.updateListOfMods(parentForm.getModListModel());
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "Modifier with this name already exists!");
@@ -410,7 +470,9 @@ public class CreateModifierController {
 		}
 		
 	}
-	
+	/**
+	 *Save button listener at Edit Modifier Form
+	 */
 	class SaveButtonClickListener implements ActionListener{
 
 		@Override
@@ -425,14 +487,16 @@ public class CreateModifierController {
 			updateModList(view.getListModel(),
 					editModForm.getSelectedModName(),
 					editModForm.getModNameTextField().getText());
-			editModForm.dispose();
-			
-			
-			
+					editModForm.dispose();	
+					//update JList at parent form
+					parentForm.updateListOfMods(parentForm.getModListModel());
+			parentForm.setVisible(true);		
 		}
 		
 	}
-	
+	/**
+	 *Edit button listener
+	 */
 	class EditButtonListener implements ActionListener{
 
 		@Override
@@ -449,22 +513,39 @@ public class CreateModifierController {
 		}
 		
 	}
+	/**
+	 *Delete button listener
+	 */
 	class DeleteButtonClickListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(JOptionPane.showConfirmDialog(null,
+			//if any item chosen then get confirmation from the user and delete item
+			if(editModForm.getSelectedModName() != null) {
+				if(JOptionPane.showConfirmDialog(null,
 					"Are you sure you want to delete " + editModForm.getSelectedModName() + " \nfrom Modifiers?") == 0) {
-				int index;    //index of selected list item
-				index = view.getModList().getSelectedIndex();
-				deleteModifier(view.getListModel().getElementAt(index));
-				removeItemFromModList(view, index);
-				removeItemFromModList(editModForm, index);
+				
+					int index;    //index of selected list item
+					index = view.getModList().getSelectedIndex();
+					//delete modifier from database
+					deleteModifier(view.getListModel().getElementAt(index));
+					//update lists
+					removeItemFromModList(view, index);
+					removeItemFromModList(editModForm, index);
+					//update parent form list
+					parentForm.updateListOfMods(parentForm.getModListModel());
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Choose item from the list to delete!");
 			}
 		}
 		
+		
 	}
-	
+	/**
+	 *Finished button listener for Edit Modifier Form
+	 */
 	class EditModFormFinishedClickListener implements ActionListener{
 
 		@Override
@@ -474,13 +555,18 @@ public class CreateModifierController {
 		}
 		
 	}
-	
+	/**
+	 *Modifier list selection listener for Create Modifier Form
+	 */
 	class ModifierListSelectionListener implements ListSelectionListener{
 
 		@Override
 		public void valueChanged(ListSelectionEvent evt) {	
+			//if edit button is not displayed then display it
 			if(!view.getEditButton().isVisible())
 				view.getEditButton().setVisible(true);
+			//if change is complete get selected value from the list
+			//set selected modifier name 
 			if(!evt.getValueIsAdjusting()) {
 				JList<String> list = (JList<String>)evt.getSource();
 				editModForm.setSelectedModName(list.getSelectedValue());
@@ -488,6 +574,17 @@ public class CreateModifierController {
 				
 		}
 		
+	} 
+	/**
+	 *Finished button click  listener for Create Modifier Form
+	 */
+	class FinishedButtonClickListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			view.dispose();
+			parentForm.setVisible(true);
+		}
+		
 	}
-	
 }

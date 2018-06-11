@@ -31,7 +31,8 @@ public class CreateModifiersListController {
 			CreateModifierController modFormsController) {
 		
 		this.view = view;                      
-		this.modFormsController = modFormsController;               
+		this.modFormsController = modFormsController; 
+		modFormsController.setParentForm(view);
 		this.view.addAddButtonClickListener(new AddButtonClickListener());
 		this.view.addRemoveButtonClickListener(new RemoveButtonClickListener());
 		this.view.addLocationButtonClickListener(new LocationButtonClickListener());
@@ -128,6 +129,8 @@ public class CreateModifiersListController {
 		}
 		return false;
 	}
+	
+	
 	
 	public static void addModToList(JList listOfMods,         //list of existing modifiers
 			JList modList,                                    //new list
@@ -453,6 +456,7 @@ public class CreateModifiersListController {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			view.setVisible(false);
 			modFormsController.getView().setVisible(true);
 			
 		}

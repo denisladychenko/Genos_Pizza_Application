@@ -63,7 +63,7 @@ public class CreateModifiersListForm extends JFrame{
 					   pageTxt;                          //page that button is placed on
 	
 	public CreateModifiersListForm() {
-		
+		modListModel = new DefaultListModel<String>();
 		listOfCoords = new ArrayList<int []>();
 		
 		JLabel titleLbl = new JLabel("List of Modifiers");
@@ -71,7 +71,7 @@ public class CreateModifiersListForm extends JFrame{
 		titleLbl.setFont(UtilityParameters.DATA_ENTRY_FONT);
 		titleLbl.setForeground(Color.YELLOW);
 		
-		loadListsArray();
+		loadListsArray(modListModel);
 		listOfModLst = new JList<String>(modListModel);
 		listOfModLst.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		if(modListModel.getSize() != 0)
@@ -223,7 +223,9 @@ public class CreateModifiersListForm extends JFrame{
 		getContentPane().setBackground(UtilityParameters.SET_UP_MENU_COLOR);
 		this.setVisible(true);
 	}
-	
+	public DefaultListModel<String> getModListModel() {
+		return modListModel;
+	}
 	public JList getListOfMods() {
 		return listOfModLst;
 	}
@@ -281,8 +283,8 @@ public class CreateModifiersListForm extends JFrame{
 		return con;
 	}
 	
-	public void loadListsArray() {
-		modListModel = new DefaultListModel<String>();
+	public static void loadListsArray(DefaultListModel<String> model) {
+		//model = new DefaultListModel<String>();
 		Connection con = getDatabaseConnection();
 		PreparedStatement stmt;
 		ResultSet rs;
@@ -296,14 +298,18 @@ public class CreateModifiersListForm extends JFrame{
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				modListModel.addElement(rs.getString("name_on_button"));
+				model.addElement(rs.getString("name_on_button"));
 			}		
 		
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+	public void updateListOfMods(DefaultListModel<String> model) {
+		model.clear();
+		loadListsArray(model);
+		//listOfModLst.add
+	}
 	
 	/** 
 	 * Loads the arrayList with buttons

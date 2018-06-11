@@ -447,4 +447,7 @@ public class CreateModifierForm extends JFrame{
 	public void addModifierListSelectionListener(ListSelectionListener lsl) {
 		modListLst.addListSelectionListener(lsl);
 	}
+	public void addFinishedButtonListener(ActionListener al) {
+		finishedBtn.addActionListener(al);
+	}
 }
