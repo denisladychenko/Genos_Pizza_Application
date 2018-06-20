@@ -54,6 +54,7 @@ public class AddRemoveMenuItemController {
 		this.view.addDeleteButtonListener(new DeleteButtonClickListener());
 		this.view.addEditItemButtonListener(new EditItemButtonClick());
 		this.view.addNewItemButtonListener(new NewItemButtonClickListener());
+		this.view.addModifiersListener(new AddModifiersClickListener());
 		this.editItemForm.addItemNameTxtChangeListener(new ItemNameChangeListener());
 		this.editItemForm.addImageLookUpBtnListener(new ImageLookUpBtnClickListener());
 		this.editItemForm.addImageNameChangeListener(new ImageNameChangeListener());
@@ -794,6 +795,24 @@ public class AddRemoveMenuItemController {
 		public void actionPerformed(ActionEvent arg0) {
 			editItemForm.dispose(); 
 			view.setVisible(true);     //display add/remove item form 
+		}
+		
+	}
+	
+	private class AddModifiersClickListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			AddModifiersListToItemForm addModListToItemForm = new AddModifiersListToItemForm();
+			new AddModifiersListToItemController(addModListToItemForm,
+					new CreateModifiersListController(
+							new CreateModifiersListForm(),
+							new CreateModifierController(new CreateModifierForm(),
+									new ModifierImageSelectorForm(),
+									new EditModifierForm(),
+									new EditModFormImageSelectorForm())));
+			view.setVisible(false);
+			addModListToItemForm.setVisible(true);
 		}
 		
 	}

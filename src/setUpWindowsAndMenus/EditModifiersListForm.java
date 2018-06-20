@@ -253,7 +253,7 @@ public class EditModifiersListForm extends JFrame{
 			while(rs.next()) {
 				modLists.add(rs.getString("name"));
 			}		
-		
+			con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}

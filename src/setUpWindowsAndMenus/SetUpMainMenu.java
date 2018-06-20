@@ -1,7 +1,6 @@
 package setUpWindowsAndMenus;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -14,10 +13,11 @@ public class SetUpMainMenu extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 
+	private JButton menuItemBtn;
+	
 	public SetUpMainMenu() {
 		
-		JButton menuItemBtn = new SetUpMenuButton("utensils150x100.png", 20, 20);
-		menuItemBtn.addActionListener(new SetUpMenuButtonClick());
+		menuItemBtn = new SetUpMenuButton("utensils150x100.png", 20, 20);
 		
 		
 		this.add(menuItemBtn);
@@ -27,18 +27,9 @@ public class SetUpMainMenu extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setTitle("Set Up Menu");
 		getContentPane().setBackground(UtilityParameters.SET_UP_MENU_COLOR);
-		this.setVisible(true);
+	}
+	public void addMenuItemBtnClickListener(ActionListener al) {
+		menuItemBtn.addActionListener(al);
 	}
 	
-	private static class SetUpMenuButtonClick implements ActionListener {
-		public static JFrame setUpMenuSubMenu;
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			setUpMenuSubMenu = new SetUpMenuSubMenu();
-			
-		}
-		public static JFrame getSetUpMenuSubMenu() {
-			return setUpMenuSubMenu;
-		}
-	}
 }

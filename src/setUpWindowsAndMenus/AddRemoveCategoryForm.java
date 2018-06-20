@@ -266,7 +266,7 @@ public class AddRemoveCategoryForm extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setTitle("Add/Remove Category");
 		getContentPane().setBackground(UtilityParameters.SET_UP_MENU_COLOR);
-		this.setVisible(true);
+
 	}
 	
 	

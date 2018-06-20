@@ -33,7 +33,7 @@ private static final long serialVersionUID = 1L;
 	private JTree imageTree;
 	private DefaultMutableTreeNode rootNode;
 	
-
+	//constructor
 	public EditModFormImageSelectorForm() {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(null);
@@ -41,7 +41,7 @@ private static final long serialVersionUID = 1L;
 		mainPanel.setBackground(UtilityParameters.SET_UP_MENU_COLOR);
 		
 		
-		
+		//sample button
 		imageBtn = new JButton();
 		imageBtn.setBounds(520, 10, 150, 100);
 	

@@ -51,7 +51,7 @@ private static final long serialVersionUID = 1L;
 	private DefaultListModel listModel;
 	
 	public EditModifierForm(){
-		
+		//sample button
 		button = new ItemSelectionMenuPanelButton("empty_img.png","",0, 80,50, 155, 155);
 		
 		loadModifiersArray();                  //load modifiers into array list
@@ -62,6 +62,7 @@ private static final long serialVersionUID = 1L;
 		titleLbl.setFont(new Font("Areal", Font.BOLD, 28));
 		titleLbl.setForeground(Color.YELLOW);
 		
+		//list of modifiers
 		modListLst = new JList<DefaultListModel>(listModel);
 		modListLst.setFont(new Font("Segoe UI", Font.BOLD, 22));
 	
@@ -297,25 +298,52 @@ private static final long serialVersionUID = 1L;
 	public JTextField getImageFileNameTextField() {
 		return imageFileNameTxt;
 	}
-	
+	/**
+	 *Gets modifier's name TextField 
+	 *@return modNameTxt The modifier's name text field
+	 */
 	public JTextField getModNameTextField() {
 		return modNameTxt;
 	}
+	/**
+	 *Gets gap TextField 
+	 *@return gapTxt The gap text field
+	 */
 	public JTextField getGap() {
 		return gapTxt;
 	}
+	/**
+	 *Gets price TextField 
+	 *@return priceTxt The price text field
+	 */
 	public JTextField getPrice() {
 		return priceTxt;
 	}
+	/**
+	 *Gets  name on the ticket TextField 
+	 *@return nameOnTicketTxt The name on ticket text field
+	 */
 	public JTextField getNameOnTicket() {
 		return nameOnTicketTxt;
 	}
+	/**
+	 *Sets the name of selected modifier  
+	 *@param modName The name of selected modifier
+	 */
 	public void setSelectedModName(String modName) {
 		selectedModName = modName;
 	}
+	/**
+	 *Gets the name of selected modifier 
+	 *@return selectedModName The name of selected modifier
+	 */
 	public String getSelectedModName() {
 		return selectedModName;
 	}
+	/**
+	 *Gets list model 
+	 *@return listModel The list model
+	 */
 	public DefaultListModel<String> getListModel(){
 		return listModel;
 	}
@@ -371,7 +399,9 @@ private static final long serialVersionUID = 1L;
 		}
 		return valid;
 	}
-	
+	/**
+	 *Loads items into the list model 
+	 */
 	public void loadModifiersArray() {
 		listModel = new DefaultListModel<String>();
 		Connection con = getDatabaseConnection();
@@ -380,7 +410,7 @@ private static final long serialVersionUID = 1L;
 		String statement;
 		
 		try {
-			
+			//get modifier names from database
 			statement = "SELECT name_on_button FROM modifiers "
 					+ "ORDER BY name_on_button ASC";
 			stmt = con.prepareStatement(statement);
@@ -389,7 +419,7 @@ private static final long serialVersionUID = 1L;
 			while(rs.next()) {
 				listModel.addElement(rs.getString("name_on_button"));
 			}		
-		
+			con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -401,12 +431,24 @@ private static final long serialVersionUID = 1L;
 	public void addImageNameChangeListener(DocumentListener dl) {
 		imageFileNameTxt.getDocument().addDocumentListener(dl);
 	}
+	/**
+	 *Save button click listener
+	 *@param al The action listener
+	 */
 	public void addSaveButtonClickListener(ActionListener al) {
 		saveBtn.addActionListener(al);
 	}
+	/**
+	 *Finished button click listener
+	 *@param al The action listener
+	 */
 	public void addFinishedButtonClickListener(ActionListener al) {
 		finishedBtn.addActionListener(al);
 	}
+	/**
+	 *Image Look Up button click listener
+	 *@param al The action listener
+	 */
 	public void addImageLookUpButtonClickListener(ActionListener al) {
 		imageLookUpBtn.addActionListener(al);
 	}

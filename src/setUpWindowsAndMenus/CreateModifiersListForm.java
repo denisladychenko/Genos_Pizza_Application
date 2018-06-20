@@ -63,8 +63,8 @@ public class CreateModifiersListForm extends JFrame{
 					   pageTxt;                          //page that button is placed on
 	
 	public CreateModifiersListForm() {
-		modListModel = new DefaultListModel<String>();
-		listOfCoords = new ArrayList<int []>();
+		modListModel = new DefaultListModel<String>();            //initialize the list of modifiers objects
+		listOfCoords = new ArrayList<int []>();                   //initialize the list of coordinates
 		
 		JLabel titleLbl = new JLabel("List of Modifiers");
 		titleLbl.setBounds(70, 5, 300, 30);
@@ -221,45 +221,90 @@ public class CreateModifiersListForm extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setTitle("Create List of Modifiers");
 		getContentPane().setBackground(UtilityParameters.SET_UP_MENU_COLOR);
-		this.setVisible(true);
 	}
+	/**
+	 *Gets the list model of available modifiers
+	 *@return modListModel The list model 
+	 */
 	public DefaultListModel<String> getModListModel() {
 		return modListModel;
 	}
+	/**
+	 *Gets the JList of available modifiers
+	 *@return listOfModLst The JList of existing modifiers
+	 */
 	public JList getListOfMods() {
 		return listOfModLst;
 	}
+	/**
+	 *Gets the JList of new list of modifiers
+	 *@return modListLst The JList of a new modifiers
+	 */
 	public JList getModList() {
 		return modListLst;
 	}
+	/**
+	 *Gets the location buttons
+	 *@return buttons The array of location buttons
+	 */
 	public ArrayList<ItemSelectionMenuPanelButton> getButtons(){
 		return buttons;
 	}
+	/**
+	 *Sets the page text
+	 *@param page The page
+	 */
 	public void setPageText(int page) {
 		pageTxt.setText(Integer.toString(page));
 	}
+	/**
+	 *Sets the page text
+	 *@param page The page
+	 */
 	public int getPage() {
 		return Integer.parseInt(pageTxt.getText());
 	}
-	
+	/**
+	 *Sets location x coordinate
+	 *@param x The x coordinate
+	 */
 	public void setLocationXCoord(int x) {
 		locationXTxt.setText(Integer.toString(x));
 	}
+	/**
+	 *Sets location y coordinate
+	 *@param y The y coordinate
+	 */
 	public void setLocationYCoord(int y) {
 		locationYTxt.setText(Integer.toString(y));
 	}
+	/**
+	 *Gets location x coordinate
+	 *@return  The x coordinate
+	 *@throws NumberFormatException
+	 */
 	public int getXcoord() {
 		if(locationXTxt.getText()!= null)
 			return Integer.parseInt(locationXTxt.getText());
 		else
 			throw new NumberFormatException();
 	}
+	/**
+	 *Gets location y coordinate
+	 *@return  The y coordinate
+	 *@throws NumberFormatException
+	 */
 	public int getYcoord() {
 		if(locationYTxt.getText()!= null)
 			return Integer.parseInt(locationYTxt.getText());
 		else
 			throw new NumberFormatException();
 	}
+	/**
+	 *Gets the the list of coordinate that of location buttons 
+	 *that are already taken
+	 *return listOfCoords The list of coordinates 
+	 */
 	public ArrayList<int []> getListOfCoords(){
 		return listOfCoords;
 	}
@@ -282,16 +327,18 @@ public class CreateModifiersListForm extends JFrame{
 		}
 		return con;
 	}
-	
+	/**
+	 *Loads items from database into the list 
+	 *@param model The list model 
+	 */
 	public static void loadListsArray(DefaultListModel<String> model) {
-		//model = new DefaultListModel<String>();
 		Connection con = getDatabaseConnection();
 		PreparedStatement stmt;
 		ResultSet rs;
 		String statement;
 		
 		try {
-			
+			//select all modifiers from database
 			statement = "SELECT name_on_button FROM modifiers "
 					+ "ORDER BY name_on_button ASC";
 			stmt = con.prepareStatement(statement);
@@ -300,15 +347,18 @@ public class CreateModifiersListForm extends JFrame{
 			while(rs.next()) {
 				model.addElement(rs.getString("name_on_button"));
 			}		
-		
+			con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 *Updates list items 
+	 *@param model The list model 
+	 */
 	public void updateListOfMods(DefaultListModel<String> model) {
 		model.clear();
 		loadListsArray(model);
-		//listOfModLst.add
 	}
 	
 	/** 
@@ -378,28 +428,60 @@ public class CreateModifiersListForm extends JFrame{
 			
 		
 	}
-	
+	/**
+	 *Click listener for Add button
+	 *@param al The action listener 
+	 */
 	public void addAddButtonClickListener(ActionListener al) {
 		addBtn.addActionListener(al);
 	}
+	/**
+	 *Click listener for Remove button
+	 *@param al The action listener 
+	 */
 	public void addRemoveButtonClickListener(ActionListener al) {
 		removeBtn.addActionListener(al);
 	}
+	/**
+	 *Click listener for Create Modifiers button
+	 *@param al The action listener 
+	 */
 	public void addCreateModifiersButtonClickListener(ActionListener al) {
 		newListBtn.addActionListener(al);
 	}
+	/**
+	 *Click listener for Save button
+	 *@param al The action listener 
+	 */
 	public void addSaveButtonClickListener(ActionListener al) {
 		saveBtn.addActionListener(al);
 	}
+	/**
+	 *Click listener for Finished button
+	 *@param al The action listener 
+	 */
 	public void addFinishedButtonClickListener(ActionListener al) {
 		finishedBtn.addActionListener(al);
 	}
+	/**
+	 *Click listener for Page1 button
+	 *@param al The action listener 
+	 */
 	public void addPage1ButtonClickListener(ActionListener al) {
 		page1Btn.addActionListener(al);
 	}
+	/**
+	 *Click listener for Page2 button
+	 *@param al The action listener 
+	 */
 	public void addPage2ButtonClickListener(ActionListener al) {
 		page2Btn.addActionListener(al);
 	}
+	/**
+	 *Click listener for location buttons
+	 *adds click listeners for all 50 location buttons
+	 *@param al The action listener 
+	 */
 	public void addLocationButtonClickListener(ActionListener al) {
 		int size = buttons.size();
 		for(int i = 0; i < size; i++) {

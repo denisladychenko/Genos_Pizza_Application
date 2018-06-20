@@ -3,6 +3,7 @@ package setUpWindowsAndMenus;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -109,7 +110,7 @@ public class AddModifiersListToItemForm extends JFrame{
 		buttonPanel.setBorder(BorderFactory.createCompoundBorder(comp, compInner));
 		buttonPanel.setBackground(UtilityParameters.SET_UP_MENU_COLOR);
 				
-		saveBtn = new JButton("Add List");
+		saveBtn = new JButton("<html><center>Add List To Item<center></html>");
 		saveBtn.setBounds(15, 23, 207, 120);
 		saveBtn.setFont(new Font("Segoe UI", Font.BOLD, 32));
 				
@@ -148,7 +149,7 @@ public class AddModifiersListToItemForm extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setTitle("Add Modifiers List To The Item Form");
 		getContentPane().setBackground(UtilityParameters.SET_UP_MENU_COLOR);
-		this.setVisible(true);
+
 	}
 	
 	/**
@@ -187,7 +188,7 @@ public class AddModifiersListToItemForm extends JFrame{
 			while(rs.next()) {
 				modLists.add(rs.getString("name"));
 			}		
-		
+			con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -266,5 +267,12 @@ public class AddModifiersListToItemForm extends JFrame{
 			}
 			
 		
+	}
+	
+	public void addNewListBtnListener(ActionListener al) {
+		newListBtn.addActionListener(al);
+	}
+	public void addEditListBtnListener(ActionListener al) {
+		editListBtn.addActionListener(al);
 	}
 }

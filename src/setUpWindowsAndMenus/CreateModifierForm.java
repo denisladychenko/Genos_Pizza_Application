@@ -56,7 +56,7 @@ public class CreateModifierForm extends JFrame{
 	private DefaultListModel<String> listModel;
 	
 	public CreateModifierForm(){
-		
+		//sample button
 		button = new ItemSelectionMenuPanelButton("empty_img.png","",0, 80,50, 155, 155);
 		
 		loadModifiersArray();                  //load modifiers into array list
@@ -302,15 +302,24 @@ public class CreateModifierForm extends JFrame{
 	public ItemSelectionMenuPanelButton getButton() {
 		return  (ItemSelectionMenuPanelButton) button;
 	}
-	
+	/**
+	 *Gets JList of modifiers
+	 *@return modListLst The JList of modifiers
+	 */
 	public JList<DefaultListModel> getModList(){
 		return modListLst;
 	}
-	
+	/**
+	 *Gets list model of the list
+	 *@return listModel The list model of the list
+	 */
 	public DefaultListModel<String> getListModel(){
 		return listModel;
 	}
-	
+	/**
+	 *Gets Edit button
+	 *@return editBtn The Edit button
+	 */
 	public JButton getEditButton() {
 		return editBtn;
 	}
@@ -322,16 +331,31 @@ public class CreateModifierForm extends JFrame{
 	public JTextField getImageFileNameTextField() {
 		return imageFileNameTxt;
 	}
-	
+	/**
+	 *Gets modifier's name text field
+	 *@return modNameTxt The modifier name text field
+	 */
 	public JTextField getModNameTextField() {
 		return modNameTxt;
 	}
+	/**
+	 *Gets the gap text field
+	 *@return gapTxt The gap text field
+	 */
 	public JTextField getGap() {
 		return gapTxt;
 	}
+	/**
+	 *Gets the price text field
+	 *@return priceTxt The price text field
+	 */
 	public JTextField getPrice() {
 		return priceTxt;
 	}
+	/**
+	 *Gets name on ticket text field
+	 *@return modListLst The JList of modifiers
+	 */
 	public JTextField getNameOnTicket() {
 		return nameOnTicketTxt;
 	}
@@ -398,7 +422,9 @@ public class CreateModifierForm extends JFrame{
 		}
 		return con;
 	}
-	
+	/**
+	 *Loads items into the list model 
+	 */
 	public void loadModifiersArray() {
 		listModel = new DefaultListModel<String>();
 		Connection con = getDatabaseConnection();
@@ -407,7 +433,7 @@ public class CreateModifierForm extends JFrame{
 		String statement;
 		
 		try {
-			
+			//select all modifier names from database
 			statement = "SELECT name_on_button FROM modifiers "
 					+ "ORDER BY name_on_button ASC";
 			stmt = con.prepareStatement(statement);
@@ -416,13 +442,16 @@ public class CreateModifierForm extends JFrame{
 			while(rs.next()) {
 				listModel.addElement(rs.getString("name_on_button"));
 			}		
-		
+			con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	
+	/**
+	 *Click listener for Image button
+	 *@param al The action listener 
+	 */
 	public void addImageButtonListener(ActionListener al) {
 		imageLookUpBtn.addActionListener(al);
 	}
@@ -434,19 +463,38 @@ public class CreateModifierForm extends JFrame{
 	public void addImageNameChangeListener(DocumentListener dl) {
 		imageFileNameTxt.getDocument().addDocumentListener(dl);
 	}
-	
+	/**
+	 *Click listener for Create button
+	 *@param al The action listener 
+	 */
 	public void addCreateButtonListener(ActionListener al) {
 		createBtn.addActionListener(al);
 	}
+	/**
+	 *Click listener for Edit button
+	 *@param al The action listener 
+	 */
 	public void addEditButtonListener(ActionListener al) {
 		editBtn.addActionListener(al);
 	}
+	/**
+	 *Click listener for Delete button
+	 *@param al The action listener 
+	 */
 	public void addDeleteButtonListener(ActionListener al) {
 		deleteBtn.addActionListener(al);
 	}
+	/**
+	 *List selection listener 
+	 *@param lsl The ListSelectionListener listener 
+	 */
 	public void addModifierListSelectionListener(ListSelectionListener lsl) {
 		modListLst.addListSelectionListener(lsl);
 	}
+	/**
+	 *Click listener for Finished button
+	 *@param al The action listener 
+	 */
 	public void addFinishedButtonListener(ActionListener al) {
 		finishedBtn.addActionListener(al);
 	}

@@ -30,6 +30,7 @@ public class CreateModifierController {
 	private EditModifierForm editModForm;
 	private EditModFormImageSelectorForm editModImageForm;
 	private CreateModifiersListForm parentForm;           //form that opens this form
+	private CreateModifiersListController parentController;   //controller of the form that opens this form
 	
 	
 	// constructor
@@ -63,6 +64,13 @@ public class CreateModifierController {
 	 **/
 	public void setParentForm(CreateModifiersListForm parentForm) {
 		this.parentForm = parentForm;
+	}
+	/**
+	 *Sets parent controller of this form 
+	 *@param parentController parent form
+	 **/
+	public void setParentController(CreateModifiersListController parentController) {
+		this.parentController = parentController;
 	}
 	/**
 	 *method to get view form
@@ -152,6 +160,7 @@ public class CreateModifierController {
 		try {
 			stmt = con.prepareStatement(statement);
 			stmt.executeUpdate();
+			con.close();
 		}catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -174,6 +183,7 @@ public class CreateModifierController {
 		try {
 			stmt = con.prepareStatement(statement);
 			stmt.executeUpdate();
+			con.close();
 		}catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -527,13 +537,25 @@ public class CreateModifierController {
 				
 					int index;    //index of selected list item
 					index = view.getModList().getSelectedIndex();
+					DefaultListModel<String> model = (DefaultListModel)view.getModList().getModel();
+					String name = model.getElementAt(index);        //name of the selected item
 					//delete modifier from database
 					deleteModifier(view.getListModel().getElementAt(index));
 					//update lists
 					removeItemFromModList(view, index);
 					removeItemFromModList(editModForm, index);
 					//update parent form list
+
 					parentForm.updateListOfMods(parentForm.getModListModel());
+					//check if the item is in the new list on CreateModifiersList form, if yes then remove it
+					if(CreateModifiersListController.itemInTheList((DefaultListModel)parentForm.getModList().getModel(),
+							name)) {
+						parentController.removeModFromList(parentController.getModItems(),
+													parentForm.getListOfCoords(),
+													parentForm.getButtons(),
+													parentForm.getModList(),
+													index);
+					}
 				}
 			}
 			else {

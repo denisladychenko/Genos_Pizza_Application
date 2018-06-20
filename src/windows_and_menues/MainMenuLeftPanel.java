@@ -1,7 +1,5 @@
 package windows_and_menues;
 
-import genosPizza.GenosPizza;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -55,7 +53,7 @@ public class MainMenuLeftPanel extends JPanel{
 		pan_1.setBorder(BorderFactory.createEtchedBorder(1));
 		pan_1.setPreferredSize(new Dimension(PAN_1_WIDTH, PAN_1_HEIGHT));
 		
-		Icon genosButtonImg = new ImageIcon(getClass().getResource("/images/gen_pizza470x260.jpg"));
+		Icon genosButtonImg = new ImageIcon(getClass().getResource("/images/pizzeria.png"));
 		Icon phoneOrderButtonImg = new ImageIcon(getClass().getResource("/images/phone_icon.png"));
 		Icon deliveryMgmtButtonImg = new ImageIcon(getClass().getResource("/images/car_icon.png"));
 		
